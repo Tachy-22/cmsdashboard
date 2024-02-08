@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import NextProviders from "./NextProviders";
+import SideMenu from "@/components/SideMenu";
+import ScreenWidth from "@/components/screen-width";
+import { bgStyle, textStyle } from "@/lib/twStyles";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +20,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} `}>
+        <NextProviders
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div
+            className={`flex  h-screen min-h-screen ${bgStyle} ${textStyle} `}
+          >
+            {children}
+          </div>
+          <ScreenWidth />
+        </NextProviders>
+      </body>
     </html>
   );
 }
