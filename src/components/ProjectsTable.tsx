@@ -136,7 +136,7 @@ export default function ProjectsTable() {
       active: "success",
       paused: "warning",
       vacation: "warning",
-      // Add other status-color mappings as needed
+      // Add other status-color mappings as needed pag
     };
     const cellValue = user[columnKey];
     switch (columnKey) {
@@ -355,7 +355,7 @@ export default function ProjectsTable() {
           isCompact
           showControls
           showShadow
-          color="secondary"
+          color="primary"
           page={page}
           total={pages}
           onChange={setPage}

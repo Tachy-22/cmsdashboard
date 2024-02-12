@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,20 +12,32 @@ import {
 } from "@nextui-org/react";
 import CreateProjectForm from "./CreateProjectForm";
 import { PlusIcon } from "lucide-react";
+import { createProject } from "@/actions/projects/createProject";
+import { useSession } from "next-auth/react";
 
 export default function CreateProjectModalButton() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { data: session } = useSession();
 
-  const handleSubmit = (formData: FormData) => {
+  console.log("session in client:", session);
+
+  const handleSubmit = async (formData: FormData) => {
     const projectData = Object.fromEntries(Array.from(formData.entries()));
-
+    const project = await createProject({
+      title: "demo name",
+      theme: "#fffff",
+      creatorId: "6592856561087c92988614a7",
+      slug: "slug",
+      admins: ["abc@gmail.com", "efg@gmail.com"],
+    });
+    console.log("project created ", project);
     console.log("Project Data:", projectData, projectData.project_name);
     onClose();
   };
 
   return (
     <>
-      <Button color="secondary" variant="solid" onPress={onOpen}>
+      <Button color="primary" variant="solid" onPress={onOpen}>
         <PlusIcon size="18" /> New Project
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
