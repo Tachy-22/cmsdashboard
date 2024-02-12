@@ -3,13 +3,7 @@ import React from "react";
 import SideMenu from "@/components/SideMenu";
 import Header from "@/components/Header";
 
-const DashLayout = async ({
-  params,
-  children,
-}: {
-  params: { dashboard: string };
-  children: React.ReactNode;
-}) => {
+const DashLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className=" flex h-full fixed w-full">
       <SideMenu />

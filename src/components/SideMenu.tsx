@@ -13,6 +13,7 @@ const SideMenu = () => {
   const pathname = usePathname();
 
   const isMounted = useIsMounted();
+  
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -26,7 +27,7 @@ const SideMenu = () => {
         setIsMobileMenuOpen(false);
       } else {
         setPosition("static");
-        setIsMobileMenuOpen(true);
+        setIsMobileMenuOpen(false);
       }
     };
     handleResize();

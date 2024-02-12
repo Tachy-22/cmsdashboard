@@ -319,9 +319,7 @@ export default function ProjectsTable() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-sm">
-            {users.length} users
-          </span>
+          <span className="text-default-400 text-sm">{users.length} users</span>
           <label className="flex items-center text-default-400 text-sm">
             Rows per page:
             <select
@@ -357,7 +355,7 @@ export default function ProjectsTable() {
           isCompact
           showControls
           showShadow
-          color="primary"
+          color="secondary"
           page={page}
           total={pages}
           onChange={setPage}
