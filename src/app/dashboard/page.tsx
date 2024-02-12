@@ -1,6 +1,5 @@
 import AnalyticsCard from "@/components/AnalyticsCard";
 import ProjectsTable from "@/components/ProjectsTable";
-
 const page = () => {
   return (
     <div className="flex flex-col w-full h-full p-[1rem] md:p-[2rem] xl:px-[4rem] gap-4">
@@ -8,6 +7,9 @@ const page = () => {
         {Array.from({ length: 3 }, (_, i) => i).map((_, i) => {
           return <AnalyticsCard key={i} />;
         })}
+      </div>
+      <div>
+      
       </div>
       <div className="h-full w-full">
         <ProjectsTable />

@@ -19,13 +19,13 @@ const AnalyticsCard = () => {
       <CardHeader className="flex gap-3">
         <DollarSign className={textStyle} />
         <div className="flex flex-col">
-          <p className="text-md">NextUI</p>
-          <p className="text-small text-default-500">nextui.org</p>
+          <p className="text-md">Frame 1</p>
+          <p className="text-small text-default-500">template</p>
         </div>
       </CardHeader>
       <Divider />
       <CardBody>
-        <p>Make beautiful websites regardless of your design experience.</p>
+        <p>These are modern beatiful components, just a template lol </p>
       </CardBody>
     </Card>
   );
