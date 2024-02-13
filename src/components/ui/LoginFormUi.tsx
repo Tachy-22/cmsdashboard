@@ -10,7 +10,7 @@ const FormUi = ({
 }) => {
   return (
     <div className="w-full flex justify-center items-center ">
-      <div className="flex flex-col w-full  h-full   rounded-xl backdrop-blur-lg  border- ">
+      <div className="flex flex-col w-full  h-full   rounded-xl backdrop-blur-lg gap-1">
         
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           {children}
