@@ -1,9 +1,13 @@
 import React from 'react'
+import ProductsTable from '../ProductsTable'
+import AddProductsModal from '../AddProductsModal'
 
 function Products() {
     return (
         <div>
-            This is the products form
+          <AddProductsModal/>
+          <br/>
+          <ProductsTable/>
         </div>
     )
 }
