@@ -1,9 +1,9 @@
 import React from 'react'
-
+import { Input } from '@nextui-org/react'
 function Services() {
     return (
         <div>
-            This is the services form
+              <Input isRequired label="Email Address" variant="flat" />
         </div>
     )
 }

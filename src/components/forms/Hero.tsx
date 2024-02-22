@@ -1,8 +1,11 @@
 import React from "react";
 import { Input, Button, Textarea } from "@nextui-org/react";
+import MultiImageUploadModal from "../MultiImageUploadModal";
 function Hero() {
   return (
     <React.Fragment>
+      <MultiImageUploadModal/>
+      <br/>
       <div className="flex gap-x-3">
         <Input isRequired label="Hero Title" variant="flat" />
         <Input isRequired label="Button name" variant="flat" />

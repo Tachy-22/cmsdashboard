@@ -2,8 +2,6 @@ import React from "react";
 const columns = [
   { name: "NAME", uid: "name", sortable: true },
   { name: "DATE", uid: "date", sortable: true },
-  { name: "AMOUNT", uid: "amount" },
-  { name: "STATUS", uid: "status", sortable: true },
   { name: "INVOICE", uid: "invoice", sortable: true },
 ];
 

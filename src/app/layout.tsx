@@ -4,7 +4,7 @@ import "./globals.css";
 import NextProviders from "./NextProviders";
 import ScreenWidth from "@/components/screen-width";
 import { bgStyle, textStyle } from "@/lib/twStyles";
-
+import { EdgeStoreProvider } from "@/lib/edgestore";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -29,7 +29,10 @@ export default function RootLayout({
           <div
             className={`flex  h-screen min-h-screen ${bgStyle} ${textStyle} `}
           >
+            <EdgeStoreProvider>
             {children}
+            </EdgeStoreProvider>
+   
           </div>
           <ScreenWidth />
         </NextProviders>
