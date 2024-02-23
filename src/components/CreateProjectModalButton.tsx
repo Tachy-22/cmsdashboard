@@ -31,7 +31,8 @@ export default function CreateProjectModalButton() {
               <ModalHeader className="flex gap-4 items-center">
                 <Avatar
                   size="lg"
-                  src="https://i.pravatar.cc/150?u=a04258114e29026702d"
+                  src="./new_project2.png"
+                  className="bg-white dark:bg-inherit"
                 />
                 <div className="flex flex-col">
                   Create a new Project
