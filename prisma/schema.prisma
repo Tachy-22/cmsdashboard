@@ -33,16 +33,16 @@ model User {
 model Hero {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
   title    String
-  button    String
-  decription String
+  button   String
+  description String
   project  Project?      @relation(fields: [projectId], references: [id])
   projectId String?    @db.ObjectId @unique
-  images   String[]
+  images    String[]
 }
 
 model About {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  decription String
+  description String
   project  Project?     @relation(fields: [projectId], references: [id])
   projectId String?    @db.ObjectId @unique
 }
@@ -51,7 +51,7 @@ model Product {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
   name String
   type String
-  decription String
+  description String
   project  Project?     @relation(fields: [projectId], references: [id])
   projectId String?    @db.ObjectId @unique
 }
