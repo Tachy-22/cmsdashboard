@@ -22,7 +22,7 @@ const ThemePicker = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor="project_name" className="font- text-md">
+      <label htmlFor="theme" className="font- text-md">
         Theme
       </label>
       <div className="flex gap-1 justify-between items-center ">
@@ -52,8 +52,8 @@ const ThemePicker = () => {
             labelPlacement="outside-left"
             placeholder="Enter your project name here..."
             description={""}
-            id="project_color"
-            name="project_color"
+            id="theme"
+            name="theme"
             value={selectedColor}
             onChange={(e) => handleColorChange(e.target.value)}
             className="w-fit "

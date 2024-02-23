@@ -1,5 +1,7 @@
 "use client";
+import AddProductsModal from "@/components/AddProductsModal";
 import AnalyticsCard from "@/components/AnalyticsCard";
+import CreateProjectModalButton from "@/components/CreateProjectModalButton";
 import ProjectsTable from "@/components/ProjectsTable";
 
 const page = () => {
@@ -11,6 +13,11 @@ const page = () => {
           return <AnalyticsCard key={i} />;
         })}
       </div>
+      <div className="">
+        {" "}
+        <CreateProjectModalButton />
+      </div>
+
       <div className="h-full w-full">
         <ProjectsTable />
       </div>

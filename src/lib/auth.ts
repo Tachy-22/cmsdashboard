@@ -1,6 +1,6 @@
 import { createUser } from "@/actions/users/createUser";
 import { findUser } from "@/actions/users/findUser";
-import { NextAuthOptions, getServerSession } from "next-auth";
+import { NextAuthOptions, Session, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { Awaitable, User } from "next-auth";
@@ -56,7 +56,11 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
-      const updatedSession = { ...session, id: "test_id" };
+      const dbUser = (await findUser(session?.user?.email as string)) as User;
+
+      const updatedSession = {
+        user: { ...session.user, id: dbUser.id },
+      } as unknown as Session;
 
       return updatedSession;
     },
