@@ -9,12 +9,11 @@ export const getProjects = async (projectIds: string[]) => {
         id: { in: projectIds },
       },
     });
-    revalidatePath("/dashboard");
+
     if (projects) {
       revalidatePath("/dashboard");
       return projects;
     } else {
-      revalidatePath("/dashboard");
       return undefined;
     }
   } catch (error) {

@@ -7,8 +7,10 @@ import { createProject } from "@/actions/projects/createProject";
 import { useSession } from "next-auth/react";
 import useProjectAdmins from "@/lib/hooks/useProjectAdmins";
 import { updateAdminsProjectIds } from "@/actions/users/updateAdminsProjectIds";
+import { useRouter } from "next/navigation";
 
 const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
+  const router = useRouter();
   const { data: session } = useSession();
   const {
     searchInput,
@@ -21,38 +23,37 @@ const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
   } = useProjectAdmins(session);
   const [isLoading, setisLoading] = useState(false);
 
- const handleSubmit = async (formData: FormData) => {
-   try {
-     const projectData = {
-       ...Object.fromEntries(formData),
-       creatorId: session?.user?.id as string,
-       slug: "slug",
-       admins: admins.map((admin) => admin.email),
-     };
+  const handleSubmit = async (formData: FormData) => {
+    setisLoading(true);
+    try {
+      const projectData = {
+        ...Object.fromEntries(formData),
+        creatorId: session?.user?.id as string,
+        slug: "slug",
+        admins: admins.map((admin) => admin.email),
+      };
 
-     const project = await createProject(projectData as TProject);
+      const project = await createProject(projectData as TProject);
 
-     for (const admin of admins) {
-       console.log("the admins array", admin, project);
-       const newIds = [...(admin?.projectIds || []), project?.id];
-       console.log("updating ids");
+      for (const admin of admins) {
+        console.log("the admins array", admin, project);
+        const newIds = [...(admin?.projectIds || []), project?.id];
+        console.log("updating ids");
 
-       try {
-         await updateAdminsProjectIds(admin.id, newIds);
-         console.log("updated ids");
-       } catch (error) {
-         console.error("Error updating admin's projectIds:", error);
-       }
-     }
-
-     console.log("the admins array", admins);
-     setisLoading(false);
-     console.log("project created ", project);
-     onClose();
-   } catch (error) {
-     console.error("An error occurred:", error);
-   }
- };
+        try {
+          await updateAdminsProjectIds(admin.id, newIds);
+          console.log("updated ids");
+        } catch (error) {
+          console.error("Error updating admin's projectIds:", error);
+        }
+      }
+      router.push(`/dashboard/project/${project?.id}`);
+      setisLoading(false);
+      onClose();
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
 
   return (
     <form action={handleSubmit} className="w-full h-full flex flex-col gap-4 ">
