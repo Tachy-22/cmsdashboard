@@ -14,7 +14,11 @@ model Project {
   theme    String
   creator  User?      @relation(fields: [creatorId], references: [id])
   creatorId String?    @db.ObjectId
-  admins String[]
+  admins   String[]
+  hero     Hero?
+  about    About?
+  product Product? 
+  contact Contact?
 }
 
 model User {
@@ -25,6 +29,43 @@ model User {
   image   String?
   projects  Project[]
 }
+
+model Hero {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  button   String
+  description String
+  project  Project?      @relation(fields: [projectId], references: [id])
+  projectId String?    @db.ObjectId @unique
+  images    String[]
+}
+
+model About {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  project  Project?     @relation(fields: [projectId], references: [id])
+  projectId String?    @db.ObjectId @unique
+}
+
+model Product {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  type String
+  description String
+  project  Project?     @relation(fields: [projectId], references: [id])
+  projectId String?    @db.ObjectId @unique
+}
+
+model Contact {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  adress String
+  location String
+  
+  project  Project?     @relation(fields: [projectId], references: [id])
+  projectId String?    @db.ObjectId @unique
+}
+
+
 
 // Address is an embedded document
 // type Address {
