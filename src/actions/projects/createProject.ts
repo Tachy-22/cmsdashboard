@@ -23,9 +23,8 @@ export const createProject = async (projectData: TProject) => {
       },
     });
     if (project) {
+      console.log({ project });
       return project;
-    } else {
-      return;
     }
   } catch (error) {
     console.error("an error occured when trying to create a project:", error);

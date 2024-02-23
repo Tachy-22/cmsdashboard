@@ -15,11 +15,12 @@ type TProject = {
   admins: string[];
 };
 
-type Session = {
+type TSession = {
   user?: {
     name?: string | null;
     email?: string | null;
     image?: string | null;
+    projectIds?: string[];
   };
   expires: ISODateString;
 };

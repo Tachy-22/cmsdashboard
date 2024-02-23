@@ -2,6 +2,7 @@ import { Session } from "next-auth";
 import React, { useCallback, useState } from "react";
 
 interface UserData {
+  projectIds?: any;
   id: string;
   name: string;
   email: string;

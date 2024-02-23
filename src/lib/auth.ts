@@ -3,10 +3,11 @@ import { findUser } from "@/actions/users/findUser";
 import { NextAuthOptions, Session, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Awaitable, User } from "next-auth";
+import { Awaitable } from "next-auth";
 import bcrypt from "bcrypt";
 
 import { redirect } from "next/navigation";
+import { User } from "@prisma/client";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -59,7 +60,7 @@ export const authOptions: NextAuthOptions = {
       const dbUser = (await findUser(session?.user?.email as string)) as User;
 
       const updatedSession = {
-        user: { ...session.user, id: dbUser.id },
+        user: { ...session.user, id: dbUser.id, projectIds: dbUser.projectIds },
       } as unknown as Session;
 
       return updatedSession;

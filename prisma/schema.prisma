@@ -28,6 +28,7 @@ model User {
   password String?
   image   String?
   projects  Project[]
+  projectIds String[]
 }
 
 model Hero {
