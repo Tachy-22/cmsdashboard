@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -19,192 +20,148 @@ import {
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import { columns, users, statusOptions } from "../lib/dummy-table-data";
-import { ChevronDownIcon, File, SearchIcon } from "lucide-react";
+import { ChevronDownIcon, CopyIcon, File, SearchIcon } from "lucide-react";
+import { getProjects } from "@/actions/projects/getProjects";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Project } from "@prisma/client";
+import useFetchProjects from "@/lib/hooks/useFetchProjects";
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  avatar: string;
-  date: string;
-  status: string;
-  invoice: string;
+// type Project = {
+//   id: string;
+//   title: string;
+//   theme: string;
+//   creator: { name: string; email: string };
+//   admins: string[];
+
+//   // ... add other properties as needed
+// };
+
+type column = {
+  id: string;
+  title: string;
+  theme: string;
+  creator: { name: string; email: string };
+  admins: string[];
+  actions: string;
+  // ... add other properties as needed
 };
 
-type Status = {
-  active: string;
-  paused: string;
-  vacation: string;
-};
+const INITIAL_VISIBLE_COLUMNS = ["title", "id", "actions"];
 
-type Color =
-  | "success"
-  | "danger"
-  | "warning"
-  | "default"
-  | "primary"
-  | "secondary";
+// Sample columns
+const columns = [
+  { uid: "title", name: "Title", sortable: true },
+  { uid: "id", name: "ID", sortable: true },
+  { uid: "actions", name: "Actions", sortable: false },
 
-type Item = {
-  id: number;
-  name: string;
-  date: string;
-  status: string;
-  age: string;
-  avatar: string;
-  email: string;
-};
+  // ... add other columns as needed
+];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "amount", "date", "status", "invoice"];
+// Sample status options
+const statusOptions = [
+  { uid: "active", name: "Active" },
+  { uid: "paused", name: "Paused" },
+  { uid: "vacation", name: "Vacation" },
+  // ... add other status options as needed
+];
 
 export default function ProjectsTable() {
-  const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-  const [visibleColumns, setVisibleColumns] = React.useState(
+  const [projects, isLoading] = useFetchProjects();
+
+  const [filterValue, setFilterValue] = useState("");
+  const [selectedKeys, setSelectedKeys] = useState(new Set([]));
+  const [visibleColumns, setVisibleColumns] = useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-  const [statusFilter, setStatusFilter] = React.useState<string>("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState<{
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [sortDescriptor, setSortDescriptor] = useState<{
     column: string;
     direction: string;
   }>({
-    column: "age",
+    column: "id",
     direction: "ascending",
   });
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if ((visibleColumns as unknown as string) === "all") return columns;
+    const projectColumns = [
+      { uid: "title", name: "Title", sortable: true },
+      { uid: "id", name: "ID", sortable: true },
+      { uid: "actions", name: "Actions", sortable: true },
 
-    return columns.filter((column) =>
+      // ... add other columns as needed
+    ];
+
+    if ((visibleColumns as unknown as string) === "all") return projectColumns;
+
+    return projectColumns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
-  const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+  const renderCell = React.useCallback(
+    (project: Project, columnKey: keyof column) => {
+      switch (columnKey) {
+        case "title":
+          return (
+            <div className="w-full capitalize flex gap-3 justify-start items-center">
+              <span
+                style={{ background: `${project.theme}` }}
+                className="h-[1rem] w-[1rem] rounded-full"
+              ></span>
+              <p className="w-fit"> {project[columnKey]}</p>
+            </div>
+          );
+        case "id":
+          const handleCopyId = () => {
+            const textField = document.createElement("textarea");
+            textField.innerText = project.id;
+            document.body.appendChild(textField);
+            textField.select();
+            document.execCommand("copy");
+            textField.remove();
+          };
 
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
-      );
-    }
-
-    return filteredUsers;
-  }, [hasSearchFilter, statusFilter, filterValue]);
-
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
-
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
-
-  const sortedItems = React.useMemo(() => {
-    return [...items].sort((a, b) => {
-      // Ensure that 'sortDescriptor.column' is a valid key for indexing 'Item'
-      const columnName = sortDescriptor.column as keyof Item;
-
-      const first = a[columnName] as unknown as number;
-      const second = b[columnName] as unknown as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
-  }, [sortDescriptor, items]);
-
-  const renderCell = React.useCallback((user: User, columnKey: keyof User) => {
-    const statusColorMap: {
-      active: string;
-      paused: string;
-      vacation: string;
-    } = {
-      active: "success",
-      paused: "warning",
-      vacation: "warning",
-      // Add other status-color mappings as needed pag
-    };
-    const cellValue = user[columnKey];
-    switch (columnKey) {
-      case "name":
-        return (
-          <div className="w-min h-full ">
-            <User
-              avatarProps={{ src: user.avatar }}
-              description={user.email}
-              name={cellValue}
-            >
-              {user.email}
-            </User>
-          </div>
-        );
-      case "date":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-gray-500 gray-300/50">
-              {cellValue}
-            </p>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize"
-            color={`${cellValue === "paid" ? "success" : "danger"}`}
-            size="sm"
-            variant="light"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "invoice":
-        return (
-          <div className="relative flex justify-start items-center gap-2 w-full   rounded-md">
-            <Dropdown className="bg-background  w-full ">
-              <DropdownTrigger>
-                <Button
-                  size="lg"
-                  variant="light"
-                  className="w-fit  flex justify-start px-0"
-                >
-                  <div className=" gray-300/50 flex gap-2 w-full   justify-start px-2">
-                    <File className="text-gray-300 " />
-                    <p className=" gray-400/90">View</p>
-                  </div>
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Download</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
+          return (
+            <div className="cursor-pointer w-fit gap-3 group  flex justify-start items-center">
+              <p className=""> {project.id}</p>
+              <CopyIcon
+                size={18}
+                onClick={handleCopyId}
+                className="group-hover:opacity-100 opacity-0 transition-opacity duration-300"
+              />
+            </div>
+          );
+        case "actions":
+          return (
+            <div className="w-full h-full">
+              <Button
+                href={`/dashboard/project/${project.id}`}
+                as={Link}
+                color="primary"
+                variant="solid"
+              >
+                View
+              </Button>
+            </div>
+          );
+        // ... add cases for other columns as needed
+        default:
+          return project[columnKey];
+      }
+    },
+    []
+  );
 
   const onNextPage = React.useCallback(() => {
-    if (page < pages) {
+    if (page < Math.ceil(projects.length / rowsPerPage)) {
       setPage(page + 1);
     }
-  }, [page, pages]);
+  }, [page, projects.length, rowsPerPage]);
 
   const onPreviousPage = React.useCallback(() => {
     if (page > 1) {
@@ -214,7 +171,7 @@ export default function ProjectsTable() {
 
   const onRowsPerPageChange = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setRowsPerPage(Number(e.target.value as unknown as number));
+      setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
     []
@@ -239,9 +196,9 @@ export default function ProjectsTable() {
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4 ">
+      <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
-          <div className=" max-w-[40rem] w-full">
+          <div className="max-w-[40rem] w-full">
             <Input
               variant="faded"
               radius="full"
@@ -258,7 +215,7 @@ export default function ProjectsTable() {
               onValueChange={onSearchChange}
             />
           </div>
-          <div className=" gap-3 items-center hidden sm:flex">
+          <div className="gap-3 items-center hidden sm:flex">
             <p className="">filter by:</p>
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
@@ -278,6 +235,7 @@ export default function ProjectsTable() {
                 selectionMode="multiple"
                 onSelectionChange={setStatusFilter as (keys: Selection) => void}
               >
+                {" "}
                 {statusOptions.map(
                   (status: { uid: string | number | undefined; name: any }) => (
                     <DropdownItem key={status.uid} className="capitalize">
@@ -313,13 +271,15 @@ export default function ProjectsTable() {
                       {column.name}
                     </DropdownItem>
                   )
-                )}
+                )}{" "}
               </DropdownMenu>
             </Dropdown>
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-sm">{users.length} users</span>
+          <span className="text-default-400 text-sm">
+            {projects.length} projects
+          </span>
           <label className="flex items-center text-default-400 text-sm">
             Rows per page:
             <select
@@ -339,6 +299,7 @@ export default function ProjectsTable() {
     onSearchChange,
     statusFilter,
     visibleColumns,
+    projects.length,
     onRowsPerPageChange,
     onClear,
   ]);
@@ -349,7 +310,7 @@ export default function ProjectsTable() {
         <span className="w-[30%] text-sm text-default-400">
           {(selectedKeys as unknown as string) === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${projects.length} selected`}
         </span>
         <Pagination
           isCompact
@@ -357,12 +318,12 @@ export default function ProjectsTable() {
           showShadow
           color="primary"
           page={page}
-          total={pages}
+          total={Math.ceil(projects.length / rowsPerPage)}
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
           <Button
-            isDisabled={pages === 1}
+            isDisabled={Math.ceil(projects.length / rowsPerPage) === 1}
             size="sm"
             variant="flat"
             onPress={onPreviousPage}
@@ -370,7 +331,7 @@ export default function ProjectsTable() {
             Previous
           </Button>
           <Button
-            isDisabled={pages === 1}
+            isDisabled={Math.ceil(projects.length / rowsPerPage) === 1}
             size="sm"
             variant="flat"
             onPress={onNextPage}
@@ -382,25 +343,24 @@ export default function ProjectsTable() {
     );
   }, [
     selectedKeys,
-    filteredItems.length,
+    projects.length,
     page,
-    pages,
+    rowsPerPage,
     onPreviousPage,
     onNextPage,
   ]);
 
   return (
-    <div className="  w-full">
+    <div className="w-full">
       <Table
-        aria-label="Example table with custom cells, pagination and sorting "
+        aria-label="Projects table with custom cells, pagination and sorting "
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
         classNames={{
-          wrapper: "max-h-[382px] ",
+          wrapper: "max-h-[382px]",
         }}
         selectedKeys={selectedKeys}
-        // selectionMode="multiple"
         sortDescriptor={setSortDescriptor as SortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
@@ -416,15 +376,17 @@ export default function ProjectsTable() {
           )}
         </TableHeader>
         <TableBody
-          className=" flex justify-between"
-          emptyContent={"No users found"}
-          items={sortedItems as any}
+          className="flex justify-between"
+          emptyContent={"No projects found"}
+          items={projects}
+          isLoading={isLoading as boolean}
+          loadingContent={<div className="">loading</div>}
         >
-          {(item: User) => (
+          {(item: Project) => (
             <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell>
-                  {renderCell(item, columnKey as keyof User)}
+                  {renderCell(item, columnKey as keyof column)}
                 </TableCell>
               )}
             </TableRow>
