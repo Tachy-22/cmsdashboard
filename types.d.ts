@@ -14,6 +14,13 @@ type TProject = {
   creatorId: string | null;
   admins: string[];
 };
+type TProduct = {
+  name: string;
+  projectId: string | null;
+  description: string;
+  type: string;
+  price: string
+};
 
 type TSession = {
   user?: {
@@ -23,4 +30,22 @@ type TSession = {
     projectIds?: string[];
   };
   expires: ISODateString;
+};
+type THero = {
+  title: string;
+  projectId: string | null;
+  description: string;
+  images: string[];
+  button: string;
+};
+
+type TContact = {
+  address: string;
+  projectId: string | null;
+  location: string;
+};
+
+type TAbout = {
+  projectId: string | null;
+  description: string;
 };

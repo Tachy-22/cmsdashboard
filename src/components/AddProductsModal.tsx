@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Modal,
   ModalContent,
@@ -10,10 +10,44 @@ import {
   Input,
 } from "@nextui-org/react";
 import { MultiImageDropzoneUsage } from "./MultiImageDropUse";
+import { createProduct } from "@/actions/product/createProduct";
+import { useParams } from "next/navigation";
 
 export default function AddProductsModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const param = useParams()
+  const projectId = param.id
+  const [images, setImages] = useState<string[]>([])
+  const [isMutating, setIsMutating] = useState<boolean>(false)
 
+  const getImageUrl = (url:string)=>{
+     setImages((prev)=>([...prev, url]))
+     console.log(url)
+  }
+  console.log(isMutating)
+  const mutateProduct =  async (formData:FormData)=>{
+  setIsMutating(true)
+    try {
+      const productData = {
+        id:projectId as string,
+       projectId: projectId as string, 
+        name: formData.get("name") as string,
+        type: formData.get("type") as string,
+        price: formData.get("price") as string,
+        description: formData.get("description") as string,
+        images
+      };
+     await createProduct(productData).then((res)=>{
+      setIsMutating(false)
+      console.log(res)
+     }).catch((err)=>{
+
+     })
+    } catch (err) {
+      console.log(err);
+    
+    }
+  }
   return (
     <>
       <div className="flex flex-wrap gap-3">
@@ -27,16 +61,22 @@ export default function AddProductsModal() {
                 Upload Hero Images
               </ModalHeader>
               <ModalBody>
+              <form action={mutateProduct}>
               <div className="max-w-[500px] flex flex-col gap-y-3 mx-auto ">
-              <MultiImageDropzoneUsage />
-                <Input isRequired label="Product Name" />
-                <Input isRequired label="Product Type" />
-                <Input isRequired label="Product description" />
-                <Input isRequired label="Product Name"  type="number"/>
-                <Button>
-                    Add Product
+              <MultiImageDropzoneUsage getImageUrl={(url:string)=>{getImageUrl(url)}} />
+            
+
+
+                <Input isRequired label="Product Name" name={"name"}/>
+                <Input isRequired label="Product Type" name="type" />
+                <Input isRequired label="Product description" name="description" />
+                <Input isRequired label="Product price"  name="price" type="number"/>
+                <Button  disabled={isMutating} type={"submit"}>
+                   {isMutating ? " Add Product" :"Saving Product"}
                 </Button>
+            
               </div>
+              </form>
               </ModalBody>
               <ModalFooter className="self-end">
                 <Button color="danger" variant="light" onPress={onClose}>

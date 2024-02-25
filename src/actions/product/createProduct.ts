@@ -1,22 +1,20 @@
 "use server";
 import { prisma } from "@/lib/prisma";
+import { Product } from "@prisma/client";
 
-type TProduct = {
-  name: string;
-  projectId: string | null;
-  description: string;
-  type: string;
-};
 
-export const createProduct = async (heroData: TProduct) => {
-  const { name, projectId, description, type } = heroData;
+
+export const createProduct = async (productData: Product) => {
+  const { name, projectId, description, type, price, images } = productData;
   try {
     const product = await prisma.product.create({
       data: {
         name: name,
         projectId: projectId,
         description: description,
-        type: type,
+        type: type, 
+        price: price, 
+        images:images
       },
     });
     if (product) {

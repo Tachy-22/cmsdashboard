@@ -3,6 +3,9 @@ import ProductsTable from '../ProductsTable'
 import AddProductsModal from '../AddProductsModal'
 
 function Products() {
+  const getProductsModal =(images:string[])=>{
+return images
+  }
     return (
         <div>
           <AddProductsModal/>

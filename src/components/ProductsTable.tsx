@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -13,7 +13,8 @@ import {
 } from "@nextui-org/react";
 import { Trash, EyeIcon, PenSquare } from "lucide-react";
 import { columns, users } from "../lib/products";
-
+import { getProduct } from "@/actions/product/getProduct";
+import { useParams } from "next/navigation";
 const statusColorMap = {
   active: "success",
   paused: "danger",
@@ -21,6 +22,15 @@ const statusColorMap = {
 };
 
 export default function ProductsTable() {
+  const param = useParams()
+  const [products, setProducts] = useState<any>()
+useEffect(()=>{
+  getProduct(param.id as string).then((res)=>{
+    setProducts(res)
+  })
+},[])
+console.log(products)
+
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 

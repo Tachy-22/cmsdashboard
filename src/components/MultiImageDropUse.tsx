@@ -8,7 +8,7 @@ import {
 import { useEdgeStore } from '@/lib/edgestore';
 import { useState } from 'react';
 
-export function MultiImageDropzoneUsage() {
+export function MultiImageDropzoneUsage(getImageUrl: any) {
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   const { edgestore } = useEdgeStore();
 
@@ -40,7 +40,7 @@ export function MultiImageDropzoneUsage() {
           await Promise.all(
             addedFiles.map(async (addedFileState) => {
               try {
-                const res = await edgestore.publicFiles.upload({
+                 await edgestore.publicFiles.upload({
                   file: addedFileState.file as File,
                   onProgressChange: async (progress) => {
                     updateFileProgress(addedFileState.key, progress);
@@ -51,8 +51,12 @@ export function MultiImageDropzoneUsage() {
                       updateFileProgress(addedFileState.key, 'COMPLETE');
                     }
                   },
-                });
-                console.log(res);
+                }).then((res)=>{
+                  console.log(res)
+                  getImageUrl(res.url)
+                
+                })
+              
               } catch (err) {
                 updateFileProgress(addedFileState.key, 'ERROR');
               }

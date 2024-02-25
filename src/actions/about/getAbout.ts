@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 
-export const geAbout = async (projectId: string) => {
+export const getAbout = async (projectId: string) => {
   try {
     const about = await prisma.about.findUnique({
       where: {
