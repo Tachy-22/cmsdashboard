@@ -9,7 +9,7 @@ type THero = {
   button: string;
 };
 
-export const createProject = async (heroData: THero) => {
+export const createHero = async (heroData: THero) => {
   const { title, images, projectId, description, button } = heroData;
   try {
     const hero = await prisma.hero.create({
