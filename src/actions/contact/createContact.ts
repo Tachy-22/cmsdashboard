@@ -1,18 +1,22 @@
 "use server";
 import { prisma } from "@/lib/prisma";
+import { getContact } from "./getContact";
+import { updateContact } from "./updateContact";
 
-type TContact = {
-  adress: string;
-  projectId: string | null;
-  location: string;
-};
 
-export const createContact = async (heroData: TContact) => {
-  const { adress, projectId, location } = heroData;
+
+export const createContact = async (contactData: TContact) => {
+  const { address, projectId, location } = contactData;
+  
+  const contact=await getContact(projectId as string)
+
+  if (contact) {
+ await updateContact(contactData,contact.id)
+} else {
   try {
     const contact = await prisma.contact.create({
       data: {
-        adress: adress,
+        adress: address,
         projectId: projectId,
         location: location,
       },
@@ -28,4 +32,7 @@ export const createContact = async (heroData: TContact) => {
       error
     );
   }
+}
+
+ 
 };

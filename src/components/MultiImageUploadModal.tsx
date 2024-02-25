@@ -1,9 +1,10 @@
-import React from "react";
+import React,{useState} from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import { MultiImageDropzoneUsage } from "./MultiImageDropUse";
 
 export default function MultiImageUploadModal() {
   const {isOpen, onOpen, onClose} = useDisclosure();
+
 
 
  
@@ -25,7 +26,8 @@ export default function MultiImageUploadModal() {
             <>
               <ModalHeader className="flex flex-col gap-1">Upload Hero Images</ModalHeader>
               <ModalBody>
-          <MultiImageDropzoneUsage/>
+          <MultiImageDropzoneUsage
+          />
               </ModalBody>
               <ModalFooter className="self-end">
                 <Button color="danger" variant="light" onPress={onClose}>

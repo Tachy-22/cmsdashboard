@@ -1,9 +1,9 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 
-export const getPoduct = async (projectId: string) => {
+export const getProduct = async (projectId: string) => {
   try {
-    const product = await prisma.product.findUnique({
+    const product = await prisma.product.findMany({
       where: {
         projectId: projectId,
       },
