@@ -12,8 +12,13 @@ type TProject = {
 
 export const createProject = async (projectData: TProject) => {
   const { title, theme, creatorId, slug, admins } = projectData;
-  
+
   try {
+    const now = new Date();
+    const formattedDate = `${now.getDate()}-${
+      now.getMonth() + 1
+    }-${now.getFullYear()}`;
+    
     const project = await prisma.project.create({
       data: {
         title: title,
@@ -21,6 +26,7 @@ export const createProject = async (projectData: TProject) => {
         creatorId: creatorId,
         admins: admins,
         slug: slug,
+        createdAt: formattedDate, // Add the formatted date to the createdAt field
       },
     });
     if (project) {
