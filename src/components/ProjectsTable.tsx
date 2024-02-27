@@ -20,22 +20,11 @@ import {
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import { ChevronDownIcon, CopyIcon, File, SearchIcon } from "lucide-react";
-import { getProjects } from "@/actions/projects/getProjects";
-import { useSession } from "next-auth/react";
+import { ChevronDownIcon, CopyIcon, SearchIcon } from "lucide-react";
+
 import Link from "next/link";
 import { Project } from "@prisma/client";
 import useFetchProjects from "@/lib/hooks/useFetchProjects";
-
-// type Project = {
-//   id: string;
-//   title: string;
-//   theme: string;
-//   creator: { name: string; email: string };
-//   admins: string[];
-
-//   // ... add other properties as needed
-// };
 
 type column = {
   id: string;
@@ -68,6 +57,7 @@ const statusOptions = [
 
 export default function ProjectsTable() {
   const [projects, isLoading] = useFetchProjects();
+  const TypedProjects = projects as Project[];
 
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState(new Set([]));
@@ -151,17 +141,17 @@ export default function ProjectsTable() {
           );
         // ... add cases for other columns as needed
         default:
-          return project[columnKey];
+          return (project as any)[columnKey];
       }
     },
     []
   );
 
   const onNextPage = React.useCallback(() => {
-    if (page < Math.ceil(projects.length / rowsPerPage)) {
+    if (page < Math.ceil(TypedProjects?.length / rowsPerPage)) {
       setPage(page + 1);
     }
-  }, [page, projects.length, rowsPerPage]);
+  }, [page, TypedProjects?.length, rowsPerPage]);
 
   const onPreviousPage = React.useCallback(() => {
     if (page > 1) {
@@ -217,7 +207,7 @@ export default function ProjectsTable() {
           </div>
           <div className="gap-3 items-center hidden sm:flex">
             <p className="">filter by:</p>
-            <Dropdown>
+            {/* <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
                   endContent={<ChevronDownIcon className="text-sm" />}
@@ -235,17 +225,14 @@ export default function ProjectsTable() {
                 selectionMode="multiple"
                 onSelectionChange={setStatusFilter as (keys: Selection) => void}
               >
-                {" "}
-                {statusOptions.map(
-                  (status: { uid: string | number | undefined; name: any }) => (
-                    <DropdownItem key={status.uid} className="capitalize">
-                      {status.name}
-                    </DropdownItem>
-                  )
-                )}
+                {statusOptions?.map((status) => (
+                  <DropdownItem key={status.uid} className="capitalize">
+                    {status.name}
+                  </DropdownItem>
+                ))}
               </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
+            </Dropdown> */}
+            {/* <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
                   endContent={<ChevronDownIcon className="text-sm" />}
@@ -273,12 +260,12 @@ export default function ProjectsTable() {
                   )
                 )}{" "}
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-sm">
-            {projects.length} projects
+            {TypedProjects?.length} projects
           </span>
           <label className="flex items-center text-default-400 text-sm">
             Rows per page:
@@ -297,9 +284,7 @@ export default function ProjectsTable() {
   }, [
     filterValue,
     onSearchChange,
-    statusFilter,
-    visibleColumns,
-    projects.length,
+    TypedProjects?.length,
     onRowsPerPageChange,
     onClear,
   ]);
@@ -310,7 +295,7 @@ export default function ProjectsTable() {
         <span className="w-[30%] text-sm text-default-400">
           {(selectedKeys as unknown as string) === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${projects.length} selected`}
+            : `${selectedKeys.size} of ${TypedProjects?.length} selected`}
         </span>
         <Pagination
           isCompact
@@ -318,12 +303,12 @@ export default function ProjectsTable() {
           showShadow
           color="primary"
           page={page}
-          total={Math.ceil(projects.length / rowsPerPage)}
+          total={Math.ceil(TypedProjects?.length / rowsPerPage)}
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
           <Button
-            isDisabled={Math.ceil(projects.length / rowsPerPage) === 1}
+            isDisabled={Math.ceil(TypedProjects?.length / rowsPerPage) === 1}
             size="sm"
             variant="flat"
             onPress={onPreviousPage}
@@ -331,7 +316,7 @@ export default function ProjectsTable() {
             Previous
           </Button>
           <Button
-            isDisabled={Math.ceil(projects.length / rowsPerPage) === 1}
+            isDisabled={Math.ceil(TypedProjects?.length / rowsPerPage) === 1}
             size="sm"
             variant="flat"
             onPress={onNextPage}
@@ -343,7 +328,7 @@ export default function ProjectsTable() {
     );
   }, [
     selectedKeys,
-    projects.length,
+    TypedProjects?.length,
     page,
     rowsPerPage,
     onPreviousPage,
@@ -378,7 +363,7 @@ export default function ProjectsTable() {
         <TableBody
           className="flex justify-between"
           emptyContent={"No projects found"}
-          items={projects}
+          items={projects as Project[]}
           isLoading={isLoading as boolean}
           loadingContent={<div className="">loading</div>}
         >

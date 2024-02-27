@@ -5,7 +5,7 @@ import MultiImageUploadModal from "../MultiImageUploadModal";
 import { createHero } from "@/actions/hero/createHero";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { Hero} from "@prisma/client";
+import { Hero } from "@prisma/client";
 import SubmitButton from "./SubmitButton";
 import { useAppSelector } from "@/lib/redux/hooks";
 

@@ -28,6 +28,7 @@ type TSession = {
     email?: string | null;
     image?: string | null;
     projectIds?: string[];
+    id?: string | null;
   };
   expires: ISODateString;
 };

@@ -8,13 +8,13 @@ const useFetchProjects = () => {
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
-
+  const typedSession = session as TSession;
   useEffect(() => {
     setIsLoading(true);
     try {
       const fetchProjects = async () => {
         const projects = (await getProjects(
-          session?.user?.projectIds
+          typedSession?.user?.projectIds as unknown as string[]
         )) as unknown as Project[];
         setProjects(projects);
         setIsLoading(false);
@@ -24,7 +24,7 @@ const useFetchProjects = () => {
         fetchProjects();
       }
     } catch (error) {}
-  }, [session?.user?.projectIds, status]);
+  }, [status, typedSession?.user?.projectIds]);
   return [projects, isLoading];
 };
 

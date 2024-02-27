@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
 
       const updatedSession = {
         user: { ...session.user, id: dbUser.id, projectIds: dbUser.projectIds },
-      } as unknown as Session;
+      } as unknown as Session & { id: string; projectIds: string[] };
 
       return updatedSession;
     },
