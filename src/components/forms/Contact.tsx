@@ -5,10 +5,14 @@ import { useParams } from "next/navigation";
 import { createContact } from "@/actions/contact/createContact";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { Contact } from "@prisma/client";
+import SubmitButton from "./SubmitButton";
 
 function ContactForm() {
   const { project } = useAppSelector((state) => state.projectSlice);
-  const { location, adress } = project?.contact as Contact;
+  const { location, adress } = (project?.contact as Contact) || {
+    location: "",
+    adress: "",
+  };
 
   const params = useParams();
   const projectId = params?.id;
@@ -46,15 +50,7 @@ function ContactForm() {
           label="Location"
           variant="flat"
         />
-        <Button
-          className="w-full max-w-[150px] ml-auto mt-3 block"
-          color="primary"
-          radius="sm"
-          type="submit"
-          isLoading={pending}
-        >
-          Submit
-        </Button>
+       <SubmitButton/>
       </form>
     </div>
   );

@@ -72,13 +72,13 @@ const ProjectAdmins = ({
           >
             <User
               avatarProps={{
-                src: admin.image,
+                src: admin?.image,
               }}
               className="transition-transform cursor-pointer "
-              description={admin.email}
+              description={admin?.email}
               name={
                 <h2 className="flex gap-2 justify-between">
-                  {admin.name}
+                  {admin?.name}
                   {isOwner(admin) && (
                     <Chip
                       size="sm"

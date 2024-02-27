@@ -10,7 +10,7 @@ import {
   Tooltip,
   User,
 } from "@nextui-org/react";
-import { Trash } from "lucide-react";
+import { Trash, EyeIcon, PenSquare } from "lucide-react";
 import { Product } from "@prisma/client";
 import { useAppSelector } from "@/lib/redux/hooks";
 

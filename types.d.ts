@@ -23,6 +23,7 @@ type TProduct = {
 };
 
 type TSession = {
+  projectIds: string[];
   user?: {
     name?: string | null;
     email?: string | null;

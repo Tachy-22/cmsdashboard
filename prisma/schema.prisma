@@ -19,7 +19,7 @@ model Project {
   about    About?
   product Product[]
   contact Contact?
-  createdAt DateTime @db.Date
+  createdAt String
 }
 
 model User {
