@@ -6,7 +6,7 @@ import { createContact } from "@/actions/contact/createContact";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { Contact } from "@prisma/client";
 
-function Contact() {
+function ContactForm() {
   const { project } = useAppSelector((state) => state.projectSlice);
   const { location, adress } = project?.contact as Contact;
 
@@ -60,4 +60,4 @@ function Contact() {
   );
 }
 
-export default Contact;
+export default ContactForm;

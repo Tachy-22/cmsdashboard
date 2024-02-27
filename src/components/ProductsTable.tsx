@@ -22,7 +22,7 @@ const statusColorMap = {
 
 export default function ProductsTable() {
   const { project } = useAppSelector((state) => state.projectSlice);
-  const products = project?.product as Product;
+  const products: Product[] = project?.product as Product[];
 
   const columns = [
     {
@@ -53,7 +53,7 @@ export default function ProductsTable() {
 
   const renderCell = React.useCallback(
     (product: Product, columnKey: string) => {
-      const cellValue = product[columnKey];
+      const cellValue = (product as any)[columnKey];
 
       switch (columnKey) {
         case "name":
@@ -82,7 +82,7 @@ export default function ProductsTable() {
           return (
             <Chip
               className="capitalize"
-              color={statusColorMap[cellValue]}
+              color={(statusColorMap as any)[cellValue]}
               size="sm"
               variant="flat"
             >

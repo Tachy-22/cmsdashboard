@@ -1,24 +1,19 @@
-import React, { SetStateAction } from "react";
-import { Button, Textarea } from "@nextui-org/react";
+import { Fragment } from "react";
+import { Textarea } from "@nextui-org/react";
 import { useParams } from "next/navigation";
-import { useFormStatus } from "react-dom";
 import { createAbout } from "@/actions/about/createAbout";
 import { useAppSelector } from "@/lib/redux/hooks";
-type aboutTypes = {
-  data: TAbout;
-  setAbout: React.Dispatch<SetStateAction<TAbout>>;
-};
-function About() {
+import SubmitButton from "./SubmitButton";
+
+function AboutForm() {
   const { project } = useAppSelector((state) => state.projectSlice);
-  const aboutData = project?.about;
+  const { description } = project?.about;
   const params = useParams();
-  const projectId = params?.id;
-  const { pending } = useFormStatus();
 
   const createAboutData = async (formData: FormData) => {
     try {
       const heroFormData = {
-        projectId: projectId as string,
+        projectId: params?.id as string,
         description: formData.get("description") as string,
       };
       const success = await createAbout(heroFormData);
@@ -33,7 +28,7 @@ function About() {
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
       <form action={createAboutData}>
         <Textarea
           isRequired
@@ -42,20 +37,12 @@ function About() {
           className="mt-3"
           minRows={20}
           name="description"
-          defaultValue={aboutData?.description}
+          defaultValue={description}
         />
-        <Button
-          className="w-full max-w-[150px] ml-auto mt-3 block"
-          color="primary"
-          radius="sm"
-          type="submit"
-          isLoading={pending}
-        >
-          Save
-        </Button>
+        <SubmitButton />
       </form>
-    </React.Fragment>
+    </Fragment>
   );
 }
 
-export default About;
+export default AboutForm;

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { Hero, Project } from "@prisma/client";
+import { About, Contact, Hero, Product, Project } from "@prisma/client";
 
 // Define a type for the slice state
 export interface projectState {
-  project: Project | null;
+  project: TProjectWithData;
 }
 
 // Define the initial state using that type
@@ -18,7 +18,7 @@ export const projectSlice = createSlice({
   initialState,
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    updateProject: (state, action: PayloadAction<Project>) => {
+    updateProject: (state, action: PayloadAction<TProjectWithData>) => {
       return { project: action.payload };
     },
     updateHero: (state, action: PayloadAction<Hero>) => ({

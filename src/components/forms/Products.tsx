@@ -1,9 +1,8 @@
 import React from "react";
 import ProductsTable from "../ProductsTable";
 import AddProductsModal from "../AddProductsModal";
-import { Product } from "@prisma/client";
 
-function Products() {
+function ProductsForm() {
   
   return (
     <div>
@@ -14,4 +13,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default ProductsForm;

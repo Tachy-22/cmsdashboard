@@ -4,17 +4,14 @@ import { Input, Textarea } from "@nextui-org/react";
 import MultiImageUploadModal from "../MultiImageUploadModal";
 import { createHero } from "@/actions/hero/createHero";
 import { useParams } from "next/navigation";
-
 import Image from "next/image";
-import { Hero } from "@prisma/client";
+import { Hero} from "@prisma/client";
 import SubmitButton from "./SubmitButton";
 import { useAppSelector } from "@/lib/redux/hooks";
 
 function HeroForm() {
   const { project } = useAppSelector((state) => state.projectSlice);
-
-  const heroData = project?.hero as Hero;
-
+  const heroData: Hero = project?.hero as Hero;
   const params = useParams();
   const projectId = params?.id;
 
