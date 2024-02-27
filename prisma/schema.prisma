@@ -17,8 +17,9 @@ model Project {
   admins   String[]
   hero     Hero?
   about    About?
-  product Product? 
+  product Product[]
   contact Contact?
+  createdAt DateTime @db.Date
 }
 
 model User {

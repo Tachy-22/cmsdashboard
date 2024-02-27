@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Table,
   TableHeader,
@@ -6,15 +6,14 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  User,
   Chip,
   Tooltip,
-  getKeyValue,
+  User,
 } from "@nextui-org/react";
 import { Trash, EyeIcon, PenSquare } from "lucide-react";
-import { columns, users } from "../lib/products";
-import { getProduct } from "@/actions/product/getProduct";
-import { useParams } from "next/navigation";
+import { Product } from "@prisma/client";
+import { useAppSelector } from "@/lib/redux/hooks";
+
 const statusColorMap = {
   active: "success",
   paused: "danger",
@@ -22,76 +21,93 @@ const statusColorMap = {
 };
 
 export default function ProductsTable() {
-  const param = useParams()
-  const [products, setProducts] = useState<any>()
-useEffect(()=>{
-  getProduct(param.id as string).then((res)=>{
-    setProducts(res)
-  })
-},[])
-console.log(products)
+  const { project } = useAppSelector((state) => state.projectSlice);
+  const products: Product[] = project?.product as Product[];
 
-  const renderCell = React.useCallback((user: any, columnKey: any) => {
-    const cellValue = user[columnKey];
+  const columns = [
+    {
+      uid: "name",
+      name: "Name",
+    },
+    {
+      uid: "type",
+      name: "Type",
+    },
+    {
+      uid: "description",
+      name: "Description",
+    },
 
-    switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">
-              {user.team}
-            </p>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <PenSquare />
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <Trash />
-              </span>
-            </Tooltip>
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
+    {
+      uid: "price",
+      name: "Price",
+    },
+
+    {
+      uid: "actions",
+      name: "Actions",
+    },
+  ];
+
+  console.log({ products });
+
+  const renderCell = React.useCallback(
+    (product: Product, columnKey: string) => {
+      const cellValue = (product as any)[columnKey];
+
+      switch (columnKey) {
+        case "name":
+          return (
+            <User
+              avatarProps={{ radius: "lg", src: product.images[0] }}
+              description={product.description}
+              name={cellValue}
+            >
+              {product.description}
+            </User>
+          );
+        case "type":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm capitalize">{cellValue}</p>
+            </div>
+          );
+        case "price":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm capitalize">${cellValue}</p>
+            </div>
+          );
+        case "status":
+          return (
+            <Chip
+              className="capitalize"
+              color={(statusColorMap as any)[cellValue]}
+              size="sm"
+              variant="flat"
+            >
+              {cellValue}
+            </Chip>
+          );
+        case "actions":
+          return (
+            <div className="relative flex items-center gap-2">
+              <Tooltip color="danger" content="Delete product">
+                <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                  <Trash />
+                </span>
+              </Tooltip>
+            </div>
+          );
+        default:
+          return cellValue;
+      }
+    },
+    []
+  );
 
   return (
-    <Table aria-label="Example table with custom cells">
+    <Table aria-label="Products table">
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn
@@ -102,14 +118,16 @@ console.log(products)
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
+      <TableBody items={products}>
+        {products?.map((product) => (
+          <TableRow key={product.id}>
+            {columns.map((column) => (
+              <TableCell key={column.uid}>
+                {renderCell(product, column.uid)}
+              </TableCell>
+            ))}
           </TableRow>
-        )}
+        ))}
       </TableBody>
     </Table>
   );

@@ -49,3 +49,12 @@ type TAbout = {
   projectId: string | null;
   description: string;
 };
+
+type TProjectWithData =
+  | (Project & {
+      hero: Hero;
+      product: Product[];
+      about: About;
+      contact: Contact;
+    })
+  | null;
