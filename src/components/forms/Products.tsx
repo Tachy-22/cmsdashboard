@@ -3,12 +3,11 @@ import ProductsTable from "../ProductsTable";
 import AddProductsModal from "../AddProductsModal";
 
 function ProductsForm() {
-  
   return (
     <div>
       <AddProductsModal />
       <br />
-      <ProductsTable  />
+      <ProductsTable />
     </div>
   );
 }

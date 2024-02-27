@@ -7,7 +7,7 @@ import SubmitButton from "./SubmitButton";
 
 function AboutForm() {
   const { project } = useAppSelector((state) => state.projectSlice);
-  const { description } = project?.about;
+  const { description } = project?.about || "";
   const params = useParams();
 
   const createAboutData = async (formData: FormData) => {

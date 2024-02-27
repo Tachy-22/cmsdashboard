@@ -32,11 +32,7 @@ export default function MultiImageUploadModal({
                 Upload Hero Images
               </ModalHeader>
               <ModalBody>
-                <MultiImageDropzoneUsage
-                  getImageUrl={(url: string) => {
-                    getImageUrl(url);
-                  }}
-                />
+                <MultiImageDropzoneUsage getImageUrl={getImageUrl} />
               </ModalBody>
               <ModalFooter className="self-end">
                 <Button color="primary" onPress={onClose}>

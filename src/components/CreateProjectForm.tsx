@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import useProjectAdmins from "@/lib/hooks/useProjectAdmins";
 import { updateAdminsProjectIds } from "@/actions/users/updateAdminsProjectIds";
 import { useRouter } from "next/navigation";
-
+import SubmitButton from "./forms/SubmitButton";
 
 const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
   const router = useRouter();
@@ -37,21 +37,23 @@ const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
 
       const project = await createProject(projectData as TProject);
 
-      for (const admin of admins) {
-        console.log("the admins array", admin, project);
-        const newIds = [...(admin?.projectIds || []), project?.id];
-        console.log("updating ids");
+      if (project) {
+        for (const admin of admins) {
+          console.log("the admins array", admin, project);
+          const newIds = [...(admin?.projectIds || []), project?.id] ;
+          console.log("updating ids");
 
-        try {
-          await updateAdminsProjectIds(admin.id, newIds);
-          console.log("updated ids");
-        } catch (error) {
-          console.error("Error updating admin's projectIds:", error);
+          try {
+            await updateAdminsProjectIds(admin.id, newIds);
+            console.log("updated ids");
+          } catch (error) {
+            console.error("Error updating admin's projectIds:", error);
+          }
         }
+        router.push(`/dashboard/project/${project?.id}`);
+        setisLoading(false);
+        onClose();
       }
-      router.push(`/dashboard/project/${project?.id}`);
-      setisLoading(false);
-      onClose();
     } catch (error) {
       console.error("An error occurred:", error);
     }
@@ -100,9 +102,7 @@ const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
         <Button color="danger" variant="light" onPress={onClose}>
           Close
         </Button>
-        <Button isLoading={isLoading} color="secondary" type="submit">
-          Create project
-        </Button>
+        <SubmitButton />
       </div>
     </form>
   );

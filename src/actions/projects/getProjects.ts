@@ -13,7 +13,7 @@ export const getProjects = async (projectIds: string[]) => {
       }));
 
     if (projects) {
-      revalidatePath("/dashboard");
+      revalidatePath("/dashboard","page");
       return projects;
     } else {
       return undefined;

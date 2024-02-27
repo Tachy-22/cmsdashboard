@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import { Project } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 type TProject = {
   slug: string;
@@ -18,7 +18,7 @@ export const createProject = async (projectData: TProject) => {
     const formattedDate = `${now.getDate()}-${
       now.getMonth() + 1
     }-${now.getFullYear()}`;
-    
+
     const project = await prisma.project.create({
       data: {
         title: title,
@@ -30,6 +30,7 @@ export const createProject = async (projectData: TProject) => {
       },
     });
     if (project) {
+      revalidatePath("/dashboard", "page");
       console.log({ project });
       return project;
     }

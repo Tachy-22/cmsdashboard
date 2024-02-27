@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import {
   Modal,
@@ -26,7 +27,7 @@ export default function AddProductsModal() {
     setImages((prev) => [...prev, url]);
     console.log(url);
   };
-  console.log(isMutating);
+  console.log({images});
 
   const mutateProduct = async (formData: FormData) => {
     setIsMutating(true);

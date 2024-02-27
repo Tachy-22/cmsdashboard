@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Hero } from "@prisma/client";
 import SubmitButton from "./SubmitButton";
 import { useAppSelector } from "@/lib/redux/hooks";
+import { string } from "zod";
 
 function HeroForm() {
   const { project } = useAppSelector((state) => state.projectSlice);
@@ -21,10 +22,9 @@ function HeroForm() {
     setImages((prev) => [...prev, url]);
     console.log(url);
   };
-
+  console.log({ images, heroData });
   const uniqueImages = useMemo(
-    () =>
-      (heroData && Array.from(new Set([...heroData?.images, ...images]))) || [],
+    () => Array.from(new Set([...(heroData?.images || []), ...images])) || [],
     [heroData, images]
   );
 
@@ -35,7 +35,7 @@ function HeroForm() {
         projectId: projectId as string,
         description: formData.get("description") as string,
         button: formData.get("cta_name") as string,
-        images: [...heroData.images, ...images] as string[],
+        images: [...(heroData?.images || []), ...images] as string[],
       };
       const success = await createHero(heroFormData);
       if (success) {
