@@ -1,23 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Button,
   useDisclosure,
   Avatar,
 } from "@nextui-org/react";
 import CreateProjectForm from "./CreateProjectForm";
 import { PlusIcon } from "lucide-react";
-import { createProject } from "@/actions/projects/createProject";
-import { useSession } from "next-auth/react";
-import useProjectAdmins from "@/lib/hooks/useProjectAdmins";
 
 export default function CreateProjectModalButton() {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>

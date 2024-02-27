@@ -9,9 +9,11 @@ import useProjectAdmins from "@/lib/hooks/useProjectAdmins";
 import { updateAdminsProjectIds } from "@/actions/users/updateAdminsProjectIds";
 import { useRouter } from "next/navigation";
 
+
 const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
   const router = useRouter();
   const { data: session } = useSession();
+  const TypedSession = session as TSession;
   const {
     searchInput,
     isOwner,
@@ -28,7 +30,7 @@ const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
     try {
       const projectData = {
         ...Object.fromEntries(formData),
-        creatorId: session?.user?.id as string,
+        creatorId: TypedSession?.user?.id as string,
         slug: "slug",
         admins: admins.map((admin) => admin.email),
       };
