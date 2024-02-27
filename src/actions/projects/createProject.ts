@@ -12,6 +12,7 @@ type TProject = {
 
 export const createProject = async (projectData: TProject) => {
   const { title, theme, creatorId, slug, admins } = projectData;
+  
   try {
     const project = await prisma.project.create({
       data: {

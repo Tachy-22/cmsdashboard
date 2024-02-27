@@ -1,8 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@prisma/client";
-
-
+import { revalidatePath } from "next/cache";
 
 export const createProduct = async (productData: Product) => {
   const { name, projectId, description, type, price, images } = productData;
@@ -12,14 +11,16 @@ export const createProduct = async (productData: Product) => {
         name: name,
         projectId: projectId,
         description: description,
-        type: type, 
-        price: price, 
-        images:images
+        type: type,
+        price: price,
+        images: images,
       },
     });
     if (product) {
+      revalidatePath("/dashboard/project/[id]", "page");
       return product;
     } else {
+      revalidatePath("/dashboard/project/[id]", "page");
       return;
     }
   } catch (error) {
@@ -28,4 +29,5 @@ export const createProduct = async (productData: Product) => {
       error
     );
   }
+  revalidatePath("/dashboard/project/[id]", "page");
 };

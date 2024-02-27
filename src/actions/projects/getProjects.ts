@@ -4,11 +4,13 @@ import { revalidatePath } from "next/cache";
 
 export const getProjects = async (projectIds: string[]) => {
   try {
-    const projects = await prisma.project.findMany({
-      where: {
-        id: { in: projectIds },
-      },
-    });
+    const projects =
+      projectIds.length !== 0 &&
+      (await prisma.project.findMany({
+        where: {
+          id: { in: projectIds },
+        },
+      }));
 
     if (projects) {
       revalidatePath("/dashboard");

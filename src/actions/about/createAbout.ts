@@ -2,15 +2,15 @@
 import { prisma } from "@/lib/prisma";
 import { getAbout } from "./getAbout";
 import { updateAbout } from "./updateAbout";
-
-
+import { revalidatePath } from "next/cache";
 
 export const createAbout = async (aboutData: TAbout) => {
   const { projectId, description } = aboutData;
-const about=await getAbout(projectId as string)
+  const about = await getAbout(projectId as string);
 
   if (about) {
-    await updateAbout(aboutData,about.id)
+    await updateAbout(aboutData, about.id);
+    revalidatePath("/dashboard/project/[id]", "page");
   } else {
     try {
       const about = await prisma.about.create({
@@ -20,8 +20,10 @@ const about=await getAbout(projectId as string)
         },
       });
       if (about) {
+        revalidatePath("/dashboard/project/[id]", "page");
         return about;
       } else {
+        revalidatePath("/dashboard/project/[id]", "page");
         return;
       }
     } catch (error) {
@@ -31,6 +33,5 @@ const about=await getAbout(projectId as string)
       );
     }
   }
+  revalidatePath("/dashboard/project/[id]", "page");
 };
-
-

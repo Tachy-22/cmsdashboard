@@ -1,18 +1,17 @@
-import React from 'react'
-import ProductsTable from '../ProductsTable'
-import AddProductsModal from '../AddProductsModal'
+import React from "react";
+import ProductsTable from "../ProductsTable";
+import AddProductsModal from "../AddProductsModal";
+import { Product } from "@prisma/client";
 
 function Products() {
-  const getProductsModal =(images:string[])=>{
-return images
-  }
-    return (
-        <div>
-          <AddProductsModal/>
-          <br/>
-          <ProductsTable/>
-        </div>
-    )
+  
+  return (
+    <div>
+      <AddProductsModal />
+      <br />
+      <ProductsTable  />
+    </div>
+  );
 }
 
-export default Products
+export default Products;

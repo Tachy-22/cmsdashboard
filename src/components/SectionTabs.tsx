@@ -11,7 +11,7 @@ import {
   Tabs,
   Tab,
 } from "@nextui-org/react";
-import Hero from "@/components/forms/Hero";
+import HeroForm from "@/components/forms/Hero";
 import About from "@/components/forms/About";
 import Products from "@/components/forms/Products";
 import Contact from "@/components/forms/Contact";
@@ -20,34 +20,33 @@ import Footer from "@/components/forms/Footer";
 import { getHero } from "@/actions/hero/getHero";
 import { useParams } from "next/navigation";
 import { getAbout } from "@/actions/about/getAbout";
+import { Hero, Project } from "@prisma/client";
+import { getProduct } from "@/actions/product/getProduct";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { updateProject } from "@/lib/redux/projectSlice";
 export type Thero = {
-    title: string,
-    button: string,
-    description:string
-}
+  title: string;
+  button: string;
+  description: string;
+};
 export type Tabout = {
-  description: string
-}
-function SectionTabs() {
+  description: string;
+};
+function SectionTabs({ projectData }: { projectData: Project }) {
+  const dispatch = useAppDispatch();
+  const { project } = useAppSelector((state) => state.projectSlice);
+
   const params = useParams();
-  const [hero, setHero] = useState<Thero>();
+  const [hero, setHero] = useState<Hero>();
   const [about, setAbout] = useState<Tabout>();
-  const [producst, setProducts] = useState();
+  const [products, setProducts] = useState();
   const [contact, setContact] = useState();
+
   useEffect(() => {
-    getHero(params.id as string)
-      .then((res: any) => {
-        setHero(res);
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-      getAbout(params.id as string).then((res: any)=>{
-        setAbout(res)
-      }).catch((err)=>{
-        console.log(err)
-      })
-  }, []);
+    dispatch(updateProject(projectData));
+  }, [dispatch, projectData]);
+
+  console.log({ project });
 
   return (
     <section className="w-full max-w-[1304px] ">
@@ -61,8 +60,8 @@ function SectionTabs() {
             width={40}
           />
           <div className="flex flex-col">
-            <p className="text-md">Munros Collection</p>
-            <p className="text-small text-default-500">John Adams</p>
+            <p className="text-md">{project?.title}</p>
+            <p className="text-small text-default-500">{project?.creatorId}</p>
           </div>
         </CardHeader>
         <Divider />
@@ -86,14 +85,11 @@ function SectionTabs() {
       <div className="flex mt-12 flex-wrap gap-4 w-full">
         <Tabs aria-label="Tabs section " className=" mx-auto ">
           <Tab className="w-full block" title={"Hero"}>
-            <Hero heroData={hero} setHero={setHero} />
+            <HeroForm />
           </Tab>
 
           <Tab className="w-full block" title={"About"}>
-            <About
-            data={about}
-            setAbout={setAbout}
-            />
+            <About />
           </Tab>
 
           <Tab className="w-full block" title={"Products"}>

@@ -2,18 +2,22 @@
 import { prisma } from "@/lib/prisma";
 import { getHero } from "./getHero";
 import { updateHero } from "./updateHero";
-
-
+import { revalidatePath } from "next/cache";
 
 export const createHero = async (heroData: THero) => {
   const { title, images, projectId, description, button } = heroData;
-  console.log({ title, images, projectId, description, button } , "function itself")
+  console.log(
+    { title, images, projectId, description, button },
+    "function itself"
+  );
 
-  const hero=await getHero(projectId as string)
+  const hero = await getHero(projectId as string);
 
   if (hero) {
     //update hero
-    await updateHero(heroData,hero.id)
+    const heroUpdate = await updateHero(heroData, hero.id);
+    revalidatePath("/dashboard/project/[id]", "page");
+    return heroUpdate;
   } else {
     try {
       const hero = await prisma.hero.create({
@@ -26,16 +30,20 @@ export const createHero = async (heroData: THero) => {
         },
       });
       if (hero) {
+        revalidatePath("/dashboard/project/[id]", "page");
+
         return hero;
       } else {
+        revalidatePath("/dashboard/project/[id]", "page");
+
         return;
       }
     } catch (error) {
+      revalidatePath("/dashboard/project/[id]", "page");
       console.error(
         "an error occured when trying to create the hero content:",
         error
       );
     }
   }
- 
 };
