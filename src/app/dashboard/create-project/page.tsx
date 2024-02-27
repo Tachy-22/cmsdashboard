@@ -2,7 +2,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div>hi create project</div>
+    <div className='bg-transparent'>hi create project</div>
   )
 }
 

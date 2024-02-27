@@ -7,11 +7,7 @@ export const createProduct = async (productData: Product) => {
   const { name, projectId, description, type, price, images } = productData;
 
   try {
-    const now = new Date();
-    const formattedDate = `${now.getDate()}-${
-      now.getMonth() + 1
-    }-${now.getFullYear()}`;
-
+  
     const product = await prisma.product.create({
       data: {
         name: name,
@@ -20,7 +16,6 @@ export const createProduct = async (productData: Product) => {
         type: type,
         price: price,
         images: images,
-        createdAt: formattedDate, // Add the formatted date to the createdAt field
       },
     });
 
