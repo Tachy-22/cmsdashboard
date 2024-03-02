@@ -1,3 +1,4 @@
+"use client"
 import { Fragment } from "react";
 import { Textarea } from "@nextui-org/react";
 import { useParams } from "next/navigation";
@@ -39,6 +40,8 @@ function AboutForm() {
           name="description"
           defaultValue={description}
         />
+        <br />
+
         <SubmitButton />
       </form>
     </Fragment>

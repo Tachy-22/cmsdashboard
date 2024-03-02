@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import AddTestimonialModal from "../AddTestimonialModal";
+import TestimonialTable from "../TestimonialTable";
 
-function Testimonial() {
-    return (
-        <div>
-            This is the testimonials form
-        </div>
-    )
-}
+const Testimonial = () => {
+  return (
+    <div className="flex gap-4 flex-col">
+      <AddTestimonialModal />
+      <TestimonialTable />
+    </div>
+  );
+};
 
-export default Testimonial
+export default Testimonial;

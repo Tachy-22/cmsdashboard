@@ -100,7 +100,7 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
       </TableHeader>
-      <TableBody emptyContent={"No projects found"} items={projects}>
+      <TableBody emptyContent={"No projects found"} items={projects || []}>
         {(project) => (
           <TableRow key={project.id}>
             {columns.map((column) => (

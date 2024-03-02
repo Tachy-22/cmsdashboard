@@ -1,19 +1,20 @@
 "use client";
 import useIsMounted from "@/lib/useIsMounted";
 import { Button, Skeleton } from "@nextui-org/react";
-import { Menu, X, XSquare } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { textStyle } from "@/lib/twStyles";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import useAdminAuthIsRequired from "@/lib/hooks/useAdminAuthIsRequired";
 
 const SideMenu = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [position, setPosition] = useState("static");
   const pathname = usePathname();
-
+  const isAdmin = useAdminAuthIsRequired();
   const isMounted = useIsMounted();
-  
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -45,14 +46,9 @@ const SideMenu = () => {
       key: "dashboard",
     },
     {
-      text: "Create Project",
-      path: "create-project",
-      key: "create-project",
-    },
-    {
-      text: "Create Product",
-      path: "create-product",
-      key: "create-product",
+      text: "Deployments",
+      path: "deployments",
+      key: "deployments",
     },
   ];
 
@@ -99,6 +95,21 @@ const SideMenu = () => {
             {link.text}
           </Link>
         ))}
+        {isAdmin && (
+          <Link
+            onClick={() =>
+              position === "absolute" && setIsMobileMenuOpen(false)
+            }
+            href={`/dashboard/add-admin`}
+            className={`p-3 dark:hover:backdrop-brightness-[10%] hover:backdrop-brightness-[80%] transition-all duration-100 border-r-5    ${
+              pathname.split("/").at(-1) === "add-admin"
+                ? "dark:backdrop-brightness-[70%] backdrop-brightness-[90%] border-r-5  border-primary "
+                : "border-transparent"
+            }`}
+          >
+            Add Admin
+          </Link>
+        )}
       </section>
     </aside>
   );

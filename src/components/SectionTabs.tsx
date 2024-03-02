@@ -53,7 +53,9 @@ function SectionTabs({ projectData }: { projectData: Project }) {
           />
           <div className="flex flex-col">
             <p className="text-md">{project?.title}</p>
-            <p className="text-small text-default-500">{project?.creatorId}</p>
+            <p className="text-small text-default-500">
+              {project?.creatorName}
+            </p>
           </div>
         </CardHeader>
         <Divider />
@@ -64,7 +66,7 @@ function SectionTabs({ projectData }: { projectData: Project }) {
           </div>
           <div className="flex items-center gap-x-2">
             <p>Creation Date:</p>
-            <p>20 Feb, 2024</p>
+            <p>{project?.createdAt}</p>
           </div>
         </CardBody>
         <Divider />

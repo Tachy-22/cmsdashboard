@@ -118,7 +118,7 @@ export default function ProductsTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={products}>
+      <TableBody items={products} emptyContent={"No projects found"}>
         {products?.map((product) => (
           <TableRow key={product.id}>
             {columns.map((column) => (

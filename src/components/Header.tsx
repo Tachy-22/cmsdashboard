@@ -1,6 +1,6 @@
 import React from "react";
-import { Input } from "@nextui-org/react";
-import { SearchIcon } from "lucide-react";
+// import { Input } from "@nextui-org/react";
+// import { SearchIcon } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import UserMenuDropdown from "./UserMenuDropdown";
 import { getServerSession } from "next-auth";
@@ -14,7 +14,7 @@ const Header = async () => {
     <div className="flex justify-between items-center h-[5rem] py-3 px-[4rem] w-full ">
       <div className=" w-[30rem]  ">
         {" "}
-        <Input
+        {/* <Input
           type="email"
           placeholder="Enter search text here..."
           labelPlacement="outside"
@@ -26,7 +26,7 @@ const Header = async () => {
           isClearable
           variant="faded"
           startContent={<SearchIcon size={18} />}
-        />
+        /> */}
       </div>
       <div className=" flex gap-4 justify-center items-center ">
         <ThemeToggle />

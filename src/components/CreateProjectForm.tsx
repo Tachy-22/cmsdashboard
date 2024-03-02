@@ -9,11 +9,15 @@ import useProjectAdmins from "@/lib/hooks/useProjectAdmins";
 import { updateAdminsProjectIds } from "@/actions/users/updateAdminsProjectIds";
 import { useRouter } from "next/navigation";
 import SubmitButton from "./forms/SubmitButton";
+import { Project } from "@prisma/client";
 
 const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
   const router = useRouter();
   const { data: session } = useSession();
   const TypedSession = session as TSession;
+
+  console.log({ dum: TypedSession?.user });
+
   const {
     searchInput,
     isOwner,
@@ -31,16 +35,17 @@ const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
       const projectData = {
         ...Object.fromEntries(formData),
         creatorId: TypedSession?.user?.id as string,
+        creatorName: TypedSession?.user?.name as string,
         slug: "slug",
         admins: admins.map((admin) => admin.email),
       };
 
-      const project = await createProject(projectData as TProject);
+      const project = await createProject(projectData as Project);
 
       if (project) {
         for (const admin of admins) {
           console.log("the admins array", admin, project);
-          const newIds = [...(admin?.projectIds || []), project?.id] ;
+          const newIds = [...(admin?.projectIds || []), project?.id];
           console.log("updating ids");
 
           try {
@@ -98,7 +103,7 @@ const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
         />
       </div>
       <Divider className="" />
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-3 items-center">
         <Button color="danger" variant="light" onPress={onClose}>
           Close
         </Button>

@@ -1,5 +1,5 @@
-"use client"
-import React, { useState } from "react";
+"use client";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -15,22 +15,22 @@ import { createProduct } from "@/actions/product/createProduct";
 import { useParams } from "next/navigation";
 import { Product } from "@prisma/client";
 import SubmitButton from "./forms/SubmitButton";
+import { FileState } from "./MultiImageDropzone";
 
 export default function AddProductsModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const param = useParams();
   const projectId = param.id;
   const [images, setImages] = useState<string[]>([]);
-  const [isMutating, setIsMutating] = useState<boolean>(false);
+  const [hasUploaded, setHasUploaded] = useState<boolean | null>(null);
 
   const getImageUrl = (url: string) => {
     setImages((prev) => [...prev, url]);
     console.log(url);
   };
-  console.log({images});
+  console.log({ images });
 
   const mutateProduct = async (formData: FormData) => {
-    setIsMutating(true);
     try {
       const productData = {
         projectId: projectId as string,
@@ -42,7 +42,6 @@ export default function AddProductsModal() {
       };
       await createProduct(productData as Product)
         .then((res) => {
-          setIsMutating(false);
           console.log(res);
         })
         .catch((err) => {});
@@ -50,6 +49,19 @@ export default function AddProductsModal() {
       console.log(err);
     }
   };
+
+  const areAllFilesComplete = (fileStates: FileState[]) => {
+    if (Array.isArray(fileStates) && fileStates.length > 0) {
+      const isUploaded = fileStates.every(
+        (fileState) => fileState.progress === "COMPLETE"
+      );
+      setHasUploaded(() => isUploaded);
+      return isUploaded;
+    }
+    setHasUploaded(() => false);
+    return false;
+  };
+
   return (
     <>
       <div className="flex flex-wrap gap-3">
@@ -68,13 +80,12 @@ export default function AddProductsModal() {
               <ModalHeader className="flex flex-col gap-1">
                 Upload Hero Images
               </ModalHeader>
-              <ModalBody>
+              <ModalBody className="">
                 <form action={mutateProduct}>
                   <div className="max-w-[500px] flex flex-col gap-y-3 mx-auto ">
                     <MultiImageDropzoneUsage
-                      getImageUrl={(url: string) => {
-                        getImageUrl(url);
-                      }}
+                      getImageUrl={getImageUrl}
+                      areAllFilesComplete={areAllFilesComplete}
                     />
 
                     <Input isRequired label="Product Name" name={"name"} />
@@ -91,7 +102,9 @@ export default function AddProductsModal() {
                       type="number"
                     />
                   </div>
-                  <SubmitButton />
+                  <br />
+
+                  <SubmitButton disabled={!hasUploaded} />
                 </form>
               </ModalBody>
               <ModalFooter className="self-end items-center flex justify-end w-full">

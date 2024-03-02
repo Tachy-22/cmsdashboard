@@ -60,8 +60,18 @@ export const authOptions: NextAuthOptions = {
       const dbUser = (await findUser(session?.user?.email as string)) as User;
 
       const updatedSession = {
-        user: { ...session.user, id: dbUser.id, projectIds: dbUser.projectIds },
-      } as unknown as Session & { id: string; projectIds: string[] };
+        user: {
+          ...session.user,
+          id: dbUser.id,
+          projectIds: dbUser.projectIds,
+          role: dbUser.role,
+        },
+      } as unknown as Session & {
+        id: string;
+        projectIds: string[];
+        creatorName: string;
+        role: string;
+      };
 
       return updatedSession;
     },
@@ -91,4 +101,11 @@ export const authOptions: NextAuthOptions = {
 export async function loginIsRequiredServer() {
   const session = await getServerSession(authOptions);
   if (!session) return redirect("/");
+}
+
+export async function adminAuthRequired() {
+  const session = await getServerSession(authOptions);
+  const TypedSession = session as TSession;
+  const isAdmin = TypedSession?.user?.role === "ADMIN";
+  return isAdmin;
 }

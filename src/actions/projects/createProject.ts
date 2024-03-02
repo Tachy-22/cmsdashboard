@@ -1,17 +1,11 @@
 "use server";
 import { prisma } from "@/lib/prisma";
+import { Project } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-type TProject = {
-  slug: string;
-  title: string;
-  theme: string;
-  creatorId: string | null;
-  admins: string[];
-};
 
-export const createProject = async (projectData: TProject) => {
-  const { title, theme, creatorId, slug, admins } = projectData;
+export const createProject = async (projectData: Project) => {
+  const { title, theme, creatorId, slug, admins, creatorName } = projectData;
 
   try {
     const now = new Date();
@@ -27,6 +21,7 @@ export const createProject = async (projectData: TProject) => {
         admins: admins,
         slug: slug,
         createdAt: formattedDate, // Add the formatted date to the createdAt field
+        creatorName: creatorName,
       },
     });
     if (project) {

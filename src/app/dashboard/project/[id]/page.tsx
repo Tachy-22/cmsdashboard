@@ -1,4 +1,3 @@
-import { getHero } from "@/actions/hero/getHero";
 import { getProjectContent } from "@/actions/projects/getProjectContent";
 import SectionTabs from "@/components/SectionTabs";
 import { Project } from "@prisma/client";
