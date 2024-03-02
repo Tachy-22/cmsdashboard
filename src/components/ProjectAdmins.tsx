@@ -52,7 +52,7 @@ const ProjectAdmins = ({
         value={searchInput}
         onChange={handleSearchChange}
       />
-      <div className=" flex gap-3 overflow-hidden w-full ">
+      <div className=" flex gap-3 overflow-x-scroll w-full ">
         {matchedUsers.map((user) => (
           <div
             onClick={() => handleAdminAddition(user)}
