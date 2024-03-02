@@ -19,7 +19,7 @@ type TProduct = {
   projectId: string | null;
   description: string;
   type: string;
-  price: string
+  price: string;
 };
 
 type TSession = {
@@ -30,6 +30,8 @@ type TSession = {
     image?: string | null;
     projectIds?: string[];
     id?: string | null;
+    creatorName: ?(string | null);
+    role: ?(string | null);
   };
   expires: ISODateString;
 };

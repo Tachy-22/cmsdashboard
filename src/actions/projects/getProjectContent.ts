@@ -13,6 +13,7 @@ export const getProjectContent = async (projectId: string) => {
           contact: true,
           product: true,
           about: true,
+          testimonial:true
         },
       });
       if (project) {

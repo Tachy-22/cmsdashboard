@@ -1,18 +1,26 @@
 "use client";
-import { Button } from "@nextui-org/react";
+// Assuming your TypeScript environment is configured properly
+
+import { Button, ButtonProps } from "@nextui-org/react";
 import React from "react";
 import { useFormStatus } from "react-dom";
 
-const SubmitButton = () => {
+// Define additional props for SubmitButton
+interface SubmitButtonProps extends ButtonProps {
+  // Add any additional props specific to SubmitButton
+}
+
+const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
   const { pending } = useFormStatus();
 
   return (
     <Button
       type="submit"
-      className="w-fit max-w-[150px] flex items-center  mt-3  "
+      className="w-fit max-w-[150px] flex items-center "
       color="primary"
       radius="sm"
       isLoading={pending}
+      {...props} // Spread the additional props
     >
       {pending ? "Saving" : "Submit"}
     </Button>

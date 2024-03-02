@@ -17,9 +17,8 @@ function ContactForm() {
   const params = useParams();
   const projectId = params?.id;
   const { pending } = useFormStatus();
-  console.log(pending);
 
-  const mutateContact = async (formData: FormData) => {
+  const handleFormSubmission = async (formData: FormData) => {
     try {
       const contactData = {
         projectId: projectId as string,
@@ -31,9 +30,10 @@ function ContactForm() {
       console.log(err);
     }
   };
+
   return (
     <div className="space-y-[10px]">
-      <form action={mutateContact}>
+      <form action={handleFormSubmission}>
         <Input
           defaultValue={adress}
           type="email"
@@ -50,6 +50,7 @@ function ContactForm() {
           label="Location"
           variant="flat"
         />
+        <br/>
        <SubmitButton/>
       </form>
     </div>

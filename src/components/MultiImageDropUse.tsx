@@ -11,28 +11,15 @@ export const saveImageUrlsToLocalstorage = (urls: string[]) => {
   localStorage.setItem("imageUrls", JSON.stringify(urls));
 };
 
-export const getImageUrlsFromLocalStorage = () => {
-  const storedUrls = localStorage.getItem("imageUrls");
-  return storedUrls ? JSON.parse(storedUrls) : [];
-};
-
-export const deleteImageUrlsFromLocalStorage = () => {
-  localStorage.removeItem("imageUrls");
-};
-
 export function MultiImageDropzoneUsage({
   getImageUrl,
+  areAllFilesComplete,
 }: {
   getImageUrl?: any;
+  areAllFilesComplete: (filestate: FileState[]) => void;
 }) {
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   const { edgestore } = useEdgeStore();
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
-
-  useEffect(() => {
-    const storedUrls = getImageUrlsFromLocalStorage();
-    setImageUrls(storedUrls);
-  }, []);
 
   function updateFileProgress(key: string, progress: FileState["progress"]) {
     setFileStates((fileStates) => {
@@ -67,10 +54,7 @@ export function MultiImageDropzoneUsage({
             })
             .then((res) => {
               console.log(res);
-              const newImageUrls = [...getImageUrlsFromLocalStorage(), res.url];
               getImageUrl(res.url);
-              saveImageUrlsToLocalstorage(newImageUrls);
-              setImageUrls(newImageUrls);
             });
         } catch (err) {
           updateFileProgress(addedFileState.key, "ERROR");
@@ -79,7 +63,11 @@ export function MultiImageDropzoneUsage({
     );
   };
 
-  console.log({ imageUrls }, { fileStates });
+  useEffect(() => {
+    areAllFilesComplete((fileStates as FileState[]) );
+  }, [areAllFilesComplete, fileStates]);
+
+  console.log({ fileStates });
   return (
     <div>
       <MultiImageDropzone

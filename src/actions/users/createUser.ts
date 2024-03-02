@@ -16,6 +16,7 @@ export const createUser = async (
         name: name,
         image: image,
         password: hashedPassword,
+        role: "CLIENT",
       },
     });
     if (user) {

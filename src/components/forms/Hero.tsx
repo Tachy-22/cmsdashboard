@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import { Input, Textarea } from "@nextui-org/react";
-import MultiImageUploadModal from "../MultiImageUploadModal";
+import AddHeroImagesModal from "../AddHeroImagesModal";
 import { createHero } from "@/actions/hero/createHero";
 import { useParams } from "next/navigation";
 import Image from "next/image";
@@ -65,7 +65,7 @@ function HeroForm() {
             </div>
           ))}
         </div>
-        <MultiImageUploadModal getImageUrl={getImageUrl} />
+        <AddHeroImagesModal getImageUrl={getImageUrl} />
       </div>
 
       <br />
@@ -95,6 +95,8 @@ function HeroForm() {
           className="mt-3"
           minRows={20}
         />
+        <br />
+
         <SubmitButton />
       </form>
     </React.Fragment>
