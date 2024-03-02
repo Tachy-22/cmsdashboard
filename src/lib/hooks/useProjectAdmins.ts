@@ -1,5 +1,6 @@
+import { getUsers } from "@/actions/users/getUsers";
 import { Session } from "next-auth";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface UserData {
   projectIds?: any;
@@ -18,6 +19,15 @@ const useProjectAdmins = (session: Session | null) => {
       image: "https://i.pravatar.cc/150?u=a04258114e29026702d",
     },
   ]);
+
+  console.log({ dummyUsers });
+  useEffect(() => {
+    const handleUserFetching = async () => {
+      const users = await getUsers();
+      setDummyUsers(users as UserData[]);
+    };
+    handleUserFetching();
+  }, []);
 
   const [admins, setAdmins] = useState<UserData[]>([session?.user as UserData]);
 

@@ -12,8 +12,9 @@ const page = async () => {
   const dbUser = (await findUser(
     session?.user?.email as string
   )) as unknown as TSession;
-  const projects = await getProjects(dbUser?.projectIds as string[]);
   const isAdmin = await adminAuthRequired();
+
+  const projects = await getProjects(dbUser?.projectIds as string[], isAdmin);
   return (
     <div className="flex flex-col w-full h-full p-[1rem] md:p-[2rem] xl:px-[4rem] gap-[2rem]">
       <div className="grid grid-cols-3 gap-5 h-fit py-3 ">

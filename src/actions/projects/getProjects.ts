@@ -2,21 +2,33 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-export const getProjects = async (projectIds: string[]) => {
+export const getProjects = async (projectIds: string[], isAdmin?: boolean) => {
   try {
-    const projects =
-      projectIds.length !== 0 &&
-      (await prisma.project.findMany({
-        where: {
-          id: { in: projectIds },
-        },
-      }));
+    if (isAdmin) {
+      const projects =
+        projectIds.length !== 0 && (await prisma.project.findMany());
 
-    if (projects) {
-      revalidatePath("/dashboard","page");
-      return projects;
+      if (projects) {
+        revalidatePath("/dashboard", "page");
+        return projects;
+      } else {
+        return undefined;
+      }
     } else {
-      return undefined;
+      const projects =
+        projectIds.length !== 0 &&
+        (await prisma.project.findMany({
+          where: {
+            id: { in: projectIds },
+          },
+        }));
+
+      if (projects) {
+        revalidatePath("/dashboard", "page");
+        return projects;
+      } else {
+        return undefined;
+      }
     }
   } catch (error) {
     console.error(
