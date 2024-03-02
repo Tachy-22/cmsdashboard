@@ -2,6 +2,8 @@ import { getProjects } from "@/actions/projects/getProjects";
 import { findUser } from "@/actions/users/findUser";
 import AnalyticsCard from "@/components/AnalyticsCard";
 import CreateProjectModalButton from "@/components/CreateProjectModalButton";
+import CreatedProjectCountCard from "@/components/CreatedProjectCountCard";
+import ProjectCountCard from "@/components/ProjectCountCard";
 import ProjectsTable from "@/components/ProjectsTable";
 import { adminAuthRequired } from "@/lib/auth";
 import { Project } from "@prisma/client";
@@ -14,13 +16,15 @@ const page = async () => {
   )) as unknown as TSession;
   const isAdmin = await adminAuthRequired();
 
-  const projects = await getProjects(dbUser?.projectIds as string[], isAdmin);
+  const projects = (await getProjects(
+    dbUser?.projectIds as string[],
+    isAdmin
+  )) as Project[];
   return (
     <div className="flex flex-col w-full h-full p-[1rem] md:p-[2rem] xl:px-[4rem] gap-[2rem]">
       <div className="grid grid-cols-3 gap-5 h-fit py-3 ">
-        {Array.from({ length: 3 }, (_, i) => i).map((_, i) => {
-          return <AnalyticsCard key={i} />;
-        })}
+        <ProjectCountCard projects={projects} />
+        <CreatedProjectCountCard projects={projects} />
       </div>
       {isAdmin ? (
         <div className="">
