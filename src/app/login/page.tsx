@@ -3,7 +3,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="flex justify-center items-center w-full h-full">
+    <div className="flex justify-center items-start pt-[6rem]  lg:items-center w-full h-fit ">
       {" "}
       <LogInForm />
     </div>

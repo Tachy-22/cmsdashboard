@@ -21,14 +21,13 @@ const page = async () => {
     isAdmin
   )) as Project[];
   return (
-    <div className="flex flex-col w-full h-full p-[1rem] md:p-[2rem] xl:px-[4rem] gap-[2rem]">
-      <div className="grid grid-cols-3 gap-5 h-fit py-3 ">
+    <div className="flex flex-col w-full h-full px-[3rem] lg:px-[4.5rem] pt-[3rem]   gap-[2rem]">
+      <div className="flex flex-col sm:flex-row sm:items-center items-start  gap-5 h-fit py-3 ">
         <ProjectCountCard projects={projects} />
         <CreatedProjectCountCard projects={projects} />
       </div>
       {isAdmin ? (
         <div className="">
-          {" "}
           <CreateProjectModalButton />
         </div>
       ) : (

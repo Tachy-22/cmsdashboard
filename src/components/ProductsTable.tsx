@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -9,10 +10,13 @@ import {
   Chip,
   Tooltip,
   User,
+  Spinner,
 } from "@nextui-org/react";
-import { Trash, EyeIcon, PenSquare } from "lucide-react";
+import { Trash } from "lucide-react";
 import { Product } from "@prisma/client";
 import { useAppSelector } from "@/lib/redux/hooks";
+import { deleteProduct } from "@/actions/product/deleteProduct";
+import { useToast } from "./ui/use-toast";
 
 const statusColorMap = {
   active: "success",
@@ -21,8 +25,10 @@ const statusColorMap = {
 };
 
 export default function ProductsTable() {
+  const { toast } = useToast();
   const { project } = useAppSelector((state) => state.projectSlice);
   const products: Product[] = project?.product as Product[];
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const columns = [
     {
@@ -50,6 +56,20 @@ export default function ProductsTable() {
   ];
 
   console.log({ products });
+
+  const handleProductDeletion = async (id: string) => {
+    try {
+      const success = await deleteProduct(id);
+      console.log({ success });
+      setIsDeleting(false);
+
+      toast({ description: "Product has been deleted !" });
+    } catch (error) {
+      setIsDeleting(false);
+
+      toast({ description: `Product has not been deleted: ${error}` });
+    }
+  };
 
   const renderCell = React.useCallback(
     (product: Product, columnKey: string) => {
@@ -93,8 +113,20 @@ export default function ProductsTable() {
           return (
             <div className="relative flex items-center gap-2">
               <Tooltip color="danger" content="Delete product">
-                <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                  <Trash />
+                <span
+                  onClick={() => {
+                    setIsDeleting((prev) => !prev);
+
+                    console.log("id of prod to del", product?.id);
+                    handleProductDeletion(product?.id);
+                  }}
+                  className="text-lg text-danger cursor-pointer active:opacity-50"
+                >
+                  {isDeleting ? (
+                    <Spinner color="danger" size="md" />
+                  ) : (
+                    <Trash />
+                  )}
                 </span>
               </Tooltip>
             </div>

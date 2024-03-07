@@ -8,9 +8,10 @@ import Image from "next/image";
 import { Hero } from "@prisma/client";
 import SubmitButton from "./SubmitButton";
 import { useAppSelector } from "@/lib/redux/hooks";
-import { string } from "zod";
+import { useToast } from "../ui/use-toast";
 
 function HeroForm() {
+  const { toast } = useToast();
   const { project } = useAppSelector((state) => state.projectSlice);
   const heroData: Hero = project?.hero as Hero;
   const params = useParams();
@@ -39,9 +40,11 @@ function HeroForm() {
       };
       const success = await createHero(heroFormData);
       if (success) {
-        console.log("Hero content updated");
+        toast({ description: "Hero content updated successfully" });
       } else {
-        console.log("Hero content failed");
+        toast({
+          description: "An error occured, Hero content was not updated !",
+        });
         return;
       }
     } catch (err) {
@@ -61,6 +64,7 @@ function HeroForm() {
                 width={100}
                 alt={`${image}`}
                 className="h-[6rem]  w-[6rem] rounded-lg "
+               
               />
             </div>
           ))}

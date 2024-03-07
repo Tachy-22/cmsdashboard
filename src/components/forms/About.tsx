@@ -1,12 +1,14 @@
-"use client"
+"use client";
 import { Fragment } from "react";
 import { Textarea } from "@nextui-org/react";
 import { useParams } from "next/navigation";
 import { createAbout } from "@/actions/about/createAbout";
 import { useAppSelector } from "@/lib/redux/hooks";
 import SubmitButton from "./SubmitButton";
+import { useToast } from "../ui/use-toast";
 
 function AboutForm() {
+  const { toast } = useToast();
   const { project } = useAppSelector((state) => state.projectSlice);
   const { description } = project?.about || "";
   const params = useParams();
@@ -19,12 +21,15 @@ function AboutForm() {
       };
       const success = await createAbout(heroFormData);
       if (success) {
-        console.log("The about content has been updated");
+        toast({ description: "About content updated successfully" });
       } else {
-        console.log("An error occured while updating the about content");
+        toast({
+          description: "An error occured, About content was not updated!",
+        });
       }
     } catch (err) {
       console.log(err);
+     
     }
   };
 
