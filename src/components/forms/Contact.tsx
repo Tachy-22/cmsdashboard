@@ -6,8 +6,10 @@ import { createContact } from "@/actions/contact/createContact";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { Contact } from "@prisma/client";
 import SubmitButton from "./SubmitButton";
+import { useToast } from "../ui/use-toast";
 
 function ContactForm() {
+  const { toast } = useToast();
   const { project } = useAppSelector((state) => state.projectSlice);
   const { location, adress } = (project?.contact as Contact) || {
     location: "",
@@ -16,7 +18,6 @@ function ContactForm() {
 
   const params = useParams();
   const projectId = params?.id;
-  const { pending } = useFormStatus();
 
   const handleFormSubmission = async (formData: FormData) => {
     try {
@@ -25,7 +26,12 @@ function ContactForm() {
         address: formData.get("email") as string,
         location: formData.get("location") as string,
       };
-      await createContact(contactData);
+      const success = await createContact(contactData);
+      if (success) {
+        toast({ description: "Contact content updated successfully" });
+      } else {
+        toast({ description: "An error occured, Contact content not updated!" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -50,8 +56,8 @@ function ContactForm() {
           label="Location"
           variant="flat"
         />
-        <br/>
-       <SubmitButton/>
+        <br />
+        <SubmitButton />
       </form>
     </div>
   );

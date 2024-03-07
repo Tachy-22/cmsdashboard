@@ -10,7 +10,6 @@ import {
 } from "@nextui-org/react";
 import { MultiImageDropzoneUsage } from "./MultiImageDropUse";
 import { FileState } from "./MultiImageDropzone";
-import SubmitButton from "./forms/SubmitButton";
 
 export default function AddHeroImagesModal({
   getImageUrl,

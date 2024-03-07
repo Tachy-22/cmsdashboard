@@ -16,8 +16,10 @@ import { Testimonial } from "@prisma/client";
 import SubmitButton from "./forms/SubmitButton";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { createTestimonial } from "@/actions/testimonial/createTestimonial";
+import { useToast } from "./ui/use-toast";
 
 export default function AddTestimonialModal() {
+  const { toast } = useToast();
   const { project } = useAppSelector((state) => state.projectSlice);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -31,8 +33,11 @@ export default function AddTestimonialModal() {
       };
       const success = await createTestimonial(testimonialData as Testimonial);
       if (success) {
+        toast({ description: "testimonial uploaded successfuly !" });
         onClose();
       } else {
+        toast({ description: "testimonial was not uploaded !" });
+
         console.log("failed");
       }
     } catch (err) {

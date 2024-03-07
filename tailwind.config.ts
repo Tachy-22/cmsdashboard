@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 import { nextui } from "@nextui-org/react";
 
 const config = {
@@ -19,12 +19,11 @@ const config = {
         "2xl": "1400px",
       },
     },
-
     extend: {
       colors: {
         foreground: "#323848",
-        primary: "#0c125a",
-        background: "#f6f6f6",
+        primary: "#317322",
+        background: "#efefef",
         secondary: "#090a0d",
       },
       keyframes: {
@@ -43,7 +42,7 @@ const config = {
       },
     },
   },
-  plugins: [nextui()],
+  plugins: [require("tailwindcss-animate"), nextui()],
 } satisfies Config;
 
-export default config;
+export default config

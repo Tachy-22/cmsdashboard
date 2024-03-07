@@ -16,8 +16,10 @@ import { useParams } from "next/navigation";
 import { Product } from "@prisma/client";
 import SubmitButton from "./forms/SubmitButton";
 import { FileState } from "./MultiImageDropzone";
+import { useToast } from "./ui/use-toast";
 
 export default function AddProductsModal() {
+  const { toast } = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const param = useParams();
   const projectId = param.id;
@@ -40,11 +42,20 @@ export default function AddProductsModal() {
         description: formData.get("description") as string,
         images,
       };
-      await createProduct(productData as Product)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {});
+      const success = await createProduct(productData as Product);
+      if (success) {
+        toast({
+          description: "Product has been uploaded successfully !",
+        });
+        toast({
+          description: "Refreshing Product table !",
+        });
+        onClose();
+      } else {
+        toast({
+          description: "An error occured, Product has been not been uploaded !",
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -81,31 +92,35 @@ export default function AddProductsModal() {
                 Upload Hero Images
               </ModalHeader>
               <ModalBody className="">
-                <form action={mutateProduct}>
+                <div>
                   <div className="max-w-[500px] flex flex-col gap-y-3 mx-auto ">
                     <MultiImageDropzoneUsage
                       getImageUrl={getImageUrl}
                       areAllFilesComplete={areAllFilesComplete}
                     />
+                    <form
+                      action={mutateProduct}
+                      className="flex flex-col gap-y-3"
+                    >
+                      <Input isRequired label="Product Name" name={"name"} />
+                      <Input isRequired label="Product Type" name="type" />
+                      <Input
+                        isRequired
+                        label="Product description"
+                        name="description"
+                      />
+                      <Input
+                        isRequired
+                        label="Product price"
+                        name="price"
+                        type="number"
+                      />
+                      <br />
 
-                    <Input isRequired label="Product Name" name={"name"} />
-                    <Input isRequired label="Product Type" name="type" />
-                    <Input
-                      isRequired
-                      label="Product description"
-                      name="description"
-                    />
-                    <Input
-                      isRequired
-                      label="Product price"
-                      name="price"
-                      type="number"
-                    />
+                      <SubmitButton disabled={!hasUploaded} />
+                    </form>
                   </div>
-                  <br />
-
-                  <SubmitButton disabled={!hasUploaded} />
-                </form>
+                </div>
               </ModalBody>
               <ModalFooter className="self-end items-center flex justify-end w-full">
                 <Button color="danger" variant="light" onPress={onClose}>

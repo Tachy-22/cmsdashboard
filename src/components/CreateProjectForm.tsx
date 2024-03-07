@@ -10,13 +10,12 @@ import { updateAdminsProjectIds } from "@/actions/users/updateAdminsProjectIds";
 import { useRouter } from "next/navigation";
 import SubmitButton from "./forms/SubmitButton";
 import { Project } from "@prisma/client";
+import { useToast } from "./ui/use-toast";
 
 const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
   const router = useRouter();
   const { data: session } = useSession();
   const TypedSession = session as TSession;
-
-  console.log({ dum: TypedSession?.user });
 
   const {
     searchInput,
@@ -27,10 +26,9 @@ const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
     handleAdminRemoval,
     handleSearchChange,
   } = useProjectAdmins(session);
-  const [isLoading, setisLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (formData: FormData) => {
-    setisLoading(true);
     try {
       const projectData = {
         ...Object.fromEntries(formData),
@@ -43,21 +41,35 @@ const CreateProjectForm = ({ onClose }: { onClose: () => void }) => {
       const project = await createProject(projectData as Project);
 
       if (project) {
+        toast({ description: "Project created successfully !" });
+
         for (const admin of admins) {
           console.log("the admins array", admin, project);
           const newIds = [...(admin?.projectIds || []), project?.id];
-          console.log("updating ids");
 
           try {
-            await updateAdminsProjectIds(admin.id, newIds);
-            console.log("updated ids");
+            const sucess = await updateAdminsProjectIds(admin.id, newIds);
+            if (sucess) {
+              toast({
+                description: "All admin profiles have been successfully updated.",
+              });
+              toast({
+                description: "Redirecting ...",
+              });
+            } else {
+              toast({
+                description: "error with admin addition.",
+              });
+            }
           } catch (error) {
             console.error("Error updating admin's projectIds:", error);
+            toast({ description: "error with admin addition." });
           }
         }
         router.push(`/dashboard/project/${project?.id}`);
-        setisLoading(false);
         onClose();
+      } else {
+        toast({ description: "Project was not created !" });
       }
     } catch (error) {
       console.error("An error occurred:", error);

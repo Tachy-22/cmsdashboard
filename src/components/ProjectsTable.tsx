@@ -11,12 +11,15 @@ import {
   Button,
   User,
   Avatar,
+  Chip,
 } from "@nextui-org/react";
 import { Project } from "@prisma/client";
 import { CopyIcon } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "./ui/use-toast";
 
 export default function ProjectsTable({ projects }: { projects: Project[] }) {
+  const { toast } = useToast();
   const columns = [
     {
       uid: "title",
@@ -31,6 +34,10 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
     {
       uid: "createdAt",
       name: "CreatedAt",
+    },
+    {
+      uid: "status",
+      name: "Status",
     },
 
     {
@@ -70,6 +77,15 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
             </div>
           );
 
+        case "status":
+          return (
+            <div className="">
+              <Chip variant="faded" className="">
+                pending
+              </Chip>
+            </div>
+          );
+
         case "actions":
           return (
             <Button
@@ -78,6 +94,9 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
               variant="solid"
               color="primary"
               as={Link}
+              onPress={() => {
+                toast({ description: "Redirecting..." });
+              }}
             >
               View
             </Button>
@@ -100,7 +119,11 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
       </TableHeader>
-      <TableBody emptyContent={"No projects found"} items={projects || []}>
+      <TableBody
+        emptyContent={projects ? "" :"No projects found"}
+        isLoading={!projects}
+        items={projects || []}
+      >
         {(project) => (
           <TableRow key={project.id}>
             {columns.map((column) => (

@@ -4,24 +4,41 @@ import { Card, CardBody, Chip } from "@nextui-org/react";
 import { textStyle } from "@/lib/twStyles";
 import { Project } from "@prisma/client";
 import { useSession } from "next-auth/react";
-
+import { DM_Sans } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { HandCoins } from "lucide-react";
+const dmSans = DM_Sans({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+});
 const CreatedProjectCountCard = ({ projects }: { projects: Project[] }) => {
   const { data: session } = useSession();
   const TypedSession = session as TSession;
-  const filteredProjects = projects.filter((project) => {
-    const proj = project?.creatorId === TypedSession?.user?.id;
-    return proj;
-  });
+  const filteredProjects =
+    TypedSession &&
+    projects?.filter(
+      (project) => project?.creatorId === TypedSession?.user?.id
+    );
   return (
     <Card
-      className={`  ${textStyle} max-h-fit py-4 min-w-[6rem] shadow-none drop-shadow-none `}
+      className={`  ${textStyle} max-h-fit py-3 w-full sm:max-w-[20rem] min-w-fit max-w-full `}
     >
       <CardBody>
-        <div className="flex gap-3 items-center">
-          <p className="text-md">Created Projects : </p>
-          <p className="text-lg text-default-500 px-2">
-            {filteredProjects.length}
-          </p>
+        <div className="flex gap-1 items-start">
+          <div className=" rounded-md p-1">
+            {" "}
+            <HandCoins
+              size={44}
+              strokeWidth={1}
+              className="text-secondary dark:text-white/90"
+            />
+          </div>{" "}
+          <div className="flex gap-y-2 flex-col px-4">
+            <p className={cn(`text-3xl font-bold  `, dmSans.className)}>
+              {filteredProjects?.length}
+            </p>
+            <p className="text-base  text-default-500">Created Projects </p>
+          </div>
         </div>
       </CardBody>
     </Card>
