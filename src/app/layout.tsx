@@ -3,7 +3,6 @@ import { Toaster } from "@/components/ui/toaster"
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NextProviders from "./NextProviders";
-import ScreenWidth from "@/components/screen-width";
 import { bgStyle, textStyle } from "@/lib/twStyles";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import StoreProvider from "./ReduxProvider";
@@ -22,6 +21,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession();
+  
   return (
     <html lang="en">
       <body className={`${inter.className} `}>
@@ -40,7 +40,6 @@ export default async function RootLayout({
                 <Toaster />
               </EdgeStoreProvider>
             </div>
-            {/* <ScreenWidth /> */}
           </StoreProvider>
         </NextProviders>
       </body>

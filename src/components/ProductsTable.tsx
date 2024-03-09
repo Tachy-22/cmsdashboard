@@ -55,7 +55,6 @@ export default function ProductsTable() {
     },
   ];
 
-  console.log({ products });
 
   const handleProductDeletion = async (id: string) => {
     try {

@@ -30,7 +30,6 @@ export default function TestimonialTable() {
     },
   ];
 
-  console.log({ testimonials });
 
   const renderCell = React.useCallback(
     (testimonial: Testimonial, columnKey: string) => {

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Card, CardBody, Skeleton } from "@nextui-org/react";
 import { textStyle } from "@/lib/twStyles";
 import { Project } from "@prisma/client";
 import { DM_Sans } from "next/font/google";
@@ -11,7 +11,6 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
 });
 const ProjectCountCard = ({ projects }: { projects: Project[] }) => {
-
   return (
     <Card
       className={`  ${textStyle} max-h-fit py-3 w-full sm:max-w-[20rem] min-w-fit max-w-full `}
@@ -28,12 +27,18 @@ const ProjectCountCard = ({ projects }: { projects: Project[] }) => {
             />
           </div>
           <div className="flex gap-y-2 flex-col px-4">
-            <p className={cn(`text-3xl font-bold  `, dmSans.className)}>
-              {projects?.length}
-            </p>
-            <p className="text-base  text-default-500">
-               Total Projects{" "}
-            </p>
+            {!projects && (
+              <Skeleton
+                className="text-3xl font-bold w-[1rem] h-[1rem] p-[1.2rem] rounded-md"
+                isLoaded={projects as unknown as boolean}
+              />
+            )}
+            {projects && (
+              <p className={cn(`text-3xl font-bold w-fit `, dmSans.className)}>
+                {projects?.length}
+              </p>
+            )}
+            <p className="text-base  text-default-500">Total Projects </p>
           </div>
         </div>
       </CardBody>

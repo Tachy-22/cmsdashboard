@@ -9,8 +9,6 @@ import {
   TableRow,
   TableCell,
   Button,
-  User,
-  Avatar,
   Chip,
 } from "@nextui-org/react";
 import { Project } from "@prisma/client";
@@ -45,7 +43,6 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
       name: "Actions",
     },
   ];
-
   const renderCell = React.useCallback(
     (project: Project, columnKey: string) => {
       const cellValue = (project as any)[columnKey];
@@ -105,7 +102,7 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
           return cellValue;
       }
     },
-    []
+    [toast]
   );
 
   // ... (remaining code remains the same)
@@ -119,11 +116,7 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
       </TableHeader>
-      <TableBody
-        emptyContent={projects ? "" :"No projects found"}
-        isLoading={!projects}
-        items={projects || []}
-      >
+      <TableBody emptyContent={"No projects found"} items={projects || []}>
         {(project) => (
           <TableRow key={project.id}>
             {columns.map((column) => (

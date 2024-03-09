@@ -21,9 +21,7 @@ function HeroForm() {
 
   const getImageUrl = (url: string) => {
     setImages((prev) => [...prev, url]);
-    console.log(url);
   };
-  console.log({ images, heroData });
   const uniqueImages = useMemo(
     () => Array.from(new Set([...(heroData?.images || []), ...images])) || [],
     [heroData, images]
