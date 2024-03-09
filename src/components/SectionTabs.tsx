@@ -79,7 +79,7 @@ function SectionTabs({ projectData }: { projectData: Project }) {
   };
 
   return (
-    <section className="w-full max-w-[1304px] p-[2rem] ">
+    <section className="w-full max-w-[1304px] md:p-[2rem] p-[1rem] pt-[4rem] md:pt-[2rem] ">
       <Card className="max-w-[400px] ml-auto">
         <CardHeader className="flex gap-3">
           <span
@@ -149,8 +149,8 @@ function SectionTabs({ projectData }: { projectData: Project }) {
           </Modal>
         </CardFooter>
       </Card>
-      <div className="flex mt-12 flex-wrap gap-4 w-full">
-        <Tabs aria-label="Tabs section " className=" mx-auto ">
+      <div className="flex mt-12 flex-wrap gap-4 w-full ">
+        <Tabs aria-label="Tabs section " className=" mx-auto overflow-x-auto">
           {tabData.map((tab, index) => (
             <Tab key={index} className="w-full block" title={tab.title}>
               {tab.component}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NextProviders from "./NextProviders";
@@ -21,7 +21,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession();
-  
+
   return (
     <html lang="en">
       <body className={`${inter.className} `}>
@@ -32,10 +32,12 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <StoreProvider>
-            <div className={`h-screen min-h-screen ${bgStyle} ${textStyle} `}>
-              <NavBar session={session} />
-
+            <div
+              className={`h-screen min-h-screen max-h-max ${bgStyle} ${textStyle} `}
+            >
               <EdgeStoreProvider>
+                <NavBar session={session} />
+
                 {children}
                 <Toaster />
               </EdgeStoreProvider>
