@@ -1,6 +1,5 @@
 import { getProjects } from "@/actions/projects/getProjects";
 import { findUser } from "@/actions/users/findUser";
-import AnalyticsCard from "@/components/AnalyticsCard";
 import CreateProjectModalButton from "@/components/CreateProjectModalButton";
 import CreatedProjectCountCard from "@/components/CreatedProjectCountCard";
 import ProjectCountCard from "@/components/ProjectCountCard";
@@ -16,15 +15,15 @@ const page = async () => {
   )) as unknown as TSession;
   const isAdmin = await adminAuthRequired();
 
-  const projects = (await getProjects(
-    dbUser?.projectIds as string[],
-    isAdmin
-  )) as Project[];
+  const projects = await getProjects(dbUser?.projectIds as string[], isAdmin);
+
   return (
     <div className="flex flex-col w-full h-full px-[3rem] lg:px-[4.5rem] pt-[3rem]   gap-[2rem]">
       <div className="flex flex-col sm:flex-row sm:items-center items-start  gap-5 h-fit py-3 ">
-        <ProjectCountCard projects={projects} />
-        <CreatedProjectCountCard projects={projects} />
+        <ProjectCountCard projects={projects as Project[]} />
+        {isAdmin && (
+          <CreatedProjectCountCard projects={projects as Project[]} />
+        )}
       </div>
       {isAdmin ? (
         <div className="">
@@ -35,7 +34,7 @@ const page = async () => {
       )}
 
       <div className="h-full w-full">
-        <ProjectsTable projects={projects as Project[]} />
+        <ProjectsTable projects={projects as Project[]}  />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Card, CardBody, Chip } from "@nextui-org/react";
+import { Card, CardBody, Skeleton } from "@nextui-org/react";
 import { textStyle } from "@/lib/twStyles";
 import { Project } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -19,6 +19,8 @@ const CreatedProjectCountCard = ({ projects }: { projects: Project[] }) => {
     projects?.filter(
       (project) => project?.creatorId === TypedSession?.user?.id
     );
+
+
   return (
     <Card
       className={`  ${textStyle} max-h-fit py-3 w-full sm:max-w-[20rem] min-w-fit max-w-full `}
@@ -34,9 +36,17 @@ const CreatedProjectCountCard = ({ projects }: { projects: Project[] }) => {
             />
           </div>{" "}
           <div className="flex gap-y-2 flex-col px-4">
-            <p className={cn(`text-3xl font-bold  `, dmSans.className)}>
-              {filteredProjects?.length}
-            </p>
+            {!filteredProjects && (
+              <Skeleton
+                className="text-3xl font-bold w-[1rem] h-[1rem] p-[1.2rem] rounded-md"
+                isLoaded={filteredProjects as unknown as boolean}
+              />
+            )}
+            {filteredProjects && (
+              <p className={cn(`text-3xl font-bold w-fit `, dmSans.className)}>
+                {filteredProjects?.length}
+              </p>
+            )}
             <p className="text-base  text-default-500">Created Projects </p>
           </div>
         </div>

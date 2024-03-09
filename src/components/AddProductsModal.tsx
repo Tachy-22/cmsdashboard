@@ -30,7 +30,6 @@ export default function AddProductsModal() {
     setImages((prev) => [...prev, url]);
     console.log(url);
   };
-  console.log({ images });
 
   const mutateProduct = async (formData: FormData) => {
     try {

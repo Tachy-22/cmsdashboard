@@ -12,7 +12,7 @@ export const getProjects = async (projectIds: string[], isAdmin?: boolean) => {
         revalidatePath("/dashboard", "page");
         return projects;
       } else {
-        return undefined;
+        return [];
       }
     } else {
       const projects =
@@ -27,7 +27,7 @@ export const getProjects = async (projectIds: string[], isAdmin?: boolean) => {
         revalidatePath("/dashboard", "page");
         return projects;
       } else {
-        return undefined;
+        return [];
       }
     }
   } catch (error) {

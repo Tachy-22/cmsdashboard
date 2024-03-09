@@ -25,6 +25,14 @@ import { updateProject } from "@/lib/redux/projectSlice";
 import { deleteProject } from "@/actions/projects/deleteProject";
 import { useToast } from "./ui/use-toast";
 import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
+import {
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -38,6 +46,7 @@ function SectionTabs({ projectData }: { projectData: Project }) {
   const dispatch = useAppDispatch();
   const params = useParams();
   const { project } = useAppSelector((state) => state.projectSlice);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     dispatch(updateProject(projectData as Project));
@@ -53,7 +62,6 @@ function SectionTabs({ projectData }: { projectData: Project }) {
   ];
 
   const handleProjectDeletion = async () => {
-
     try {
       const res = await deleteProject(projectData, params?.id as string);
 
@@ -74,12 +82,9 @@ function SectionTabs({ projectData }: { projectData: Project }) {
     <section className="w-full max-w-[1304px] p-[2rem] ">
       <Card className="max-w-[400px] ml-auto">
         <CardHeader className="flex gap-3">
-          <Image
-            alt="nextui logo"
-            height={40}
-            radius="sm"
-            src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-            width={40}
+          <span
+            style={{ backgroundColor: project?.theme }}
+            className={` w-[3rem] h-[3rem] rounded-full border `}
           />
           <div className="flex flex-col">
             <p className="text-md">{project?.title}</p>
@@ -104,32 +109,44 @@ function SectionTabs({ projectData }: { projectData: Project }) {
           <Link isExternal showAnchorIcon href="#">
             Visit website to see live preview
           </Link>
-          <Popover placement="bottom" showArrow offset={10}>
-            <PopoverTrigger>
-              <Button
-                variant="bordered"
-                className=" flex items-center border-red-500 text-red-500"
-              >
-                Delete
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[240px]">
-              {(titleProps) => (
-                <form
-                  action={handleProjectDeletion}
-                  className="px-1 py-2 w-full flex flex-col gap-4 justify-center"
-                >
-                  <p
-                    className="text-small font-bold text-foreground text-center"
-                    {...titleProps}
-                  >
-                    Are you sure you wish to delete this project?
-                  </p>
-                  <DeleteButton />
-                </form>
+          <Button
+            onPress={onOpen}
+            variant="bordered"
+            className=" flex items-center border-red-500 text-red-500"
+          >
+            Delete
+          </Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    Delete Project
+                  </ModalHeader>
+                  <ModalBody>
+                    <p className="text-small flex flex-col justify-center items-center  text-foreground text-center">
+                      <span className="">
+                        {" "}
+                        Are you sure you wish to delete this project?
+                      </span>
+                      <span className=""> This action can not be undone.</span>
+                    </p>{" "}
+                  </ModalBody>
+                  <ModalFooter className="flex items-center">
+                    <Button color="danger" variant="light" onPress={onClose}>
+                      Close
+                    </Button>
+                    <form
+                      action={handleProjectDeletion}
+                      className="px-1 py-2 flex flex-col gap-4 justify-center"
+                    >
+                      <DeleteButton />
+                    </form>
+                  </ModalFooter>
+                </>
               )}
-            </PopoverContent>
-          </Popover>
+            </ModalContent>
+          </Modal>
         </CardFooter>
       </Card>
       <div className="flex mt-12 flex-wrap gap-4 w-full">
