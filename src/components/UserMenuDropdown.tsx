@@ -31,8 +31,9 @@ export default function UserMenuDropdown({ session }: { session: any | null }) {
             avatarProps={{
               isBordered: true,
               src: `${session?.user?.image as string}`,
+            
             }}
-            className="transition-transform"
+            className="transition-transform scale-[90%] md:scale-[100%]"
             description={session?.user?.email as string}
             name={session?.user?.name as string}
           />

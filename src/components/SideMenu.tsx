@@ -55,17 +55,17 @@ const SideMenu = () => {
 
   return (
     <aside
-      className={`   transition-all duration-500  h-full flex flex-col   backdrop-brightness-[96%] backdrop-blur-2xl  ${bgStyle}   dark:border-stone-900 border-stone-200 z-50  border-r   ${
+      className={`   transition-all duration-500  flex flex-col h-[calc(100vh-65px)] max-h-[calc(100vh-65px)]  backdrop-brightness-[96%] backdrop-blur-2xl  ${bgStyle}   dark:border-stone-900 border-stone-200 z-30  border-r   ${
         isMobileMenuOpen
-          ? `  lg:w-[20rem] w-screen ${position} `
-          : "-translate-x-full absolute left-0 z-50 "
+          ? `  lg:w-[20rem] w-screen ${position}  `
+          : "-translate-x-full absolute  left-0  "
       } `}
     >
       <Button
         variant="bordered"
         isIconOnly
         onPress={toggleMobileMenu}
-        className={`rounded-md  absolute top-[1rem]  ${textStyle}  text-xl z-50 ${
+        className={`rounded-md  absolute top-[1rem]  ${textStyle}  text-xl z- ${
           isMobileMenuOpen
             ? "right-[0.5rem] "
             : "md:translate-x-[3rem] translate-x-[3.5rem] right-0"

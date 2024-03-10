@@ -32,16 +32,14 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <StoreProvider>
-            <div
-              className={`h-screen min-h-screen max-h-max ${bgStyle} ${textStyle} `}
-            >
-              <EdgeStoreProvider>
+            <EdgeStoreProvider>
+              <div className={`min-h- overflow-clip ${bgStyle} ${textStyle} `}>
                 <NavBar session={session} />
 
                 {children}
                 <Toaster />
-              </EdgeStoreProvider>
-            </div>
+              </div>
+            </EdgeStoreProvider>
           </StoreProvider>
         </NextProviders>
       </body>

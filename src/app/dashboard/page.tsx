@@ -18,7 +18,7 @@ const page = async () => {
   const projects = await getProjects(dbUser?.projectIds as string[], isAdmin);
 
   return (
-    <div className="flex flex-col w-full h-full px-[1rem] lg:px-[4.5rem] py-[3rem]   gap-[2rem] overflow-y-auto">
+    <div className="flex flex-col w-full  px-[1rem] lg:px-[4.5rem] py-[3rem]    gap-[2rem] -y-auto">
       <div className="flex flex-col sm:flex-row sm:items-center items-start  gap-5 h-fit py-3 ">
         <ProjectCountCard projects={projects as Project[]} />
         {isAdmin && (
@@ -33,7 +33,7 @@ const page = async () => {
         <h2>My Projects: </h2>
       )}
 
-      <div className="h-full w-full">
+      <div className="h-  w-full">
         <ProjectsTable projects={projects as Project[]} />
       </div>
     </div>

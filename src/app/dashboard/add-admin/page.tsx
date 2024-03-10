@@ -11,7 +11,7 @@ const page = async () => {
   const admins = (await getAdmins()) || [];
 
   return (
-    <div className="max-w-7xl w-full flex flex-col pt-[3rem] px-[3rem] gap-[3rem] ">
+    <div className="max-w-7xl w-full flex flex-col pt-[4rem] md:pt-[3rem] px-[1rem] md:px-[3rem] gap-[3rem] ">
       <AddAdminForm />
       <div className="flex flex-col gap-3">
         <div className="">CMS Admins:</div>

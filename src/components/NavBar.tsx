@@ -21,26 +21,28 @@ export default function NavBar({ session }: { session: any | null }) {
     { name: "home", path: "/", key: "" },
     { name: "dashboard", path: "/dashboard", key: "dashboard" },
   ];
-  
+
   return (
     <Navbar
-      className={` backdrop-brightness-[96%] backdrop-blur-2xl  ${bgStyle} z-50  border-b dark:border-stone-900 border-stone-200 sticky top-0 `}
+      className={` backdrop-brightness-[96%] backdrop-blur-3xl  z-50  border-b dark:border-stone-900 border-stone-200 sticky top-0 `}
       maxWidth="xl"
     >
       <NavbarContent>
         <NavbarBrand>
-          <Image
-            width={100}
-            height={100}
-            className=""
-            src="/demoLogo.png"
-            alt="logo"
-          />
+          <Link href="/">
+            <Image
+              width={100}
+              height={100}
+              className="min-w-[4rem]"
+              src="/demoLogo.png"
+              alt="logo"
+            />
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden lg:flex gap-4" justify="center">
-        {menuItems.map(({ name, path,key }, id) => (
+        {menuItems.map(({ name, path, key }, id) => (
           <NavbarItem key={id} isActive={pathname.split("/").at(-1) === key}>
             <Link
               color={
