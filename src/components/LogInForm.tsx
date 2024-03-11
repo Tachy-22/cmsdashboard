@@ -20,7 +20,7 @@ export default async function LogInForm() {
           height={120}
           alt=" application logo"
           className=" w-[8rem] scale-[90%] "
-          src="/demoLogo.png "
+          src="/demoLogo.png"
         />
       </div>
       <div className=" w-full ">

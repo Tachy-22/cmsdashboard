@@ -24,7 +24,7 @@ export default function NavBar({ session }: { session: any | null }) {
 
   return (
     <Navbar
-      className={` backdrop-brightness-[96%] backdrop-blur-3xl  z-50  border-b dark:border-stone-900 border-stone-200 sticky top-0 `}
+      className={` backdrop-brightness-[96%] backdrop-blur-3xl ${bgStyle}  z-50  border-b dark:border-stone-900 border-stone-200 sticky top-0 `}
       maxWidth="xl"
     >
       <NavbarContent>
