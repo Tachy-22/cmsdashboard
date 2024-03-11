@@ -33,7 +33,7 @@ export default async function RootLayout({
         >
           <StoreProvider>
             <EdgeStoreProvider>
-              <div className={`min-h- overflow-clip ${bgStyle} ${textStyle} `}>
+              <div className={`overflow-clip ${bgStyle} ${textStyle} `}>
                 <NavBar session={session} />
 
                 {children}
