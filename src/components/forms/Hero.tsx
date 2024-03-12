@@ -71,7 +71,7 @@ function HeroForm() {
 
       <br />
       <form action={createHeroData}>
-        <div className="flex gap-x-3">
+        <div className="flex md:flex-row flex-col gap-3">
           <Input
             isRequired
             label="Hero Title"
