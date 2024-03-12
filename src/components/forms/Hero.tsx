@@ -60,9 +60,8 @@ function HeroForm() {
                 src={image}
                 height={100}
                 width={100}
-                alt={`${image}`}
+                alt={`image-${id}`}
                 className="h-[6rem]  w-[6rem] rounded-lg "
-               
               />
             </div>
           ))}

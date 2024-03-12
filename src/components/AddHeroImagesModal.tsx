@@ -31,6 +31,7 @@ export default function AddHeroImagesModal({
     setHasUploaded(() => false);
     return false;
   }, []);
+
   return (
     <>
       <div className="flex flex-wrap gap-3">
@@ -53,6 +54,9 @@ export default function AddHeroImagesModal({
               </ModalBody>
               <ModalFooter className="self-end">
                 <Button
+                  className={`${
+                    hasUploaded ? "cursor-pointer" : "cursor-not-allowed"
+                  }`}
                   disabled={!hasUploaded}
                   onClick={onClose}
                   color="danger"

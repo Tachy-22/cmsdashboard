@@ -7,9 +7,7 @@ import {
 import { useEdgeStore } from "@/lib/edgestore";
 import { useEffect, useState } from "react";
 
-export const saveImageUrlsToLocalstorage = (urls: string[]) => {
-  localStorage.setItem("imageUrls", JSON.stringify(urls));
-};
+
 
 export function MultiImageDropzoneUsage({
   getImageUrl,
@@ -67,7 +65,6 @@ export function MultiImageDropzoneUsage({
     areAllFilesComplete((fileStates as FileState[]) );
   }, [areAllFilesComplete, fileStates]);
 
-  console.log({ fileStates });
   return (
     <div>
       <MultiImageDropzone
