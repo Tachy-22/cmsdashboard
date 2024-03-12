@@ -13,13 +13,13 @@ export default async function LogInForm() {
   if (session) return redirect("/dashboard");
 
   return (
-    <div className="w-[90vw] sm:w-[60vw] lg:w-[50vw] max-w-[55rem] flex flex-col items-center justify-center min-h-fit  gap-5 bg-white/70 dark:bg-secondary  p-6 rounded-md shadow-lg">
+    <div className="w-[90vw] sm:w-[60vw] lg:w-[50vw] max-w-[55rem] flex flex-col items-center justify-center min-h-fit  gap-5 bg-white/70 dark:bg-secondary  p-6 rounded-md shadow-lg h-[calc(100vh-170px)] max-h-[calc(100vh-170px)]">
       <div className="flex justify-center items-center py-2 ">
         <Image
           width={242}
           height={120}
           alt=" application logo"
-          className=" w-[8rem] scale-[90%] "
+          className=" w-[8rem]"
           src="/demoLogo.png"
         />
       </div>

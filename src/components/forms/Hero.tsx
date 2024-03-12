@@ -60,9 +60,8 @@ function HeroForm() {
                 src={image}
                 height={100}
                 width={100}
-                alt={`${image}`}
+                alt={`image-${id}`}
                 className="h-[6rem]  w-[6rem] rounded-lg "
-               
               />
             </div>
           ))}
@@ -72,7 +71,7 @@ function HeroForm() {
 
       <br />
       <form action={createHeroData}>
-        <div className="flex gap-x-3">
+        <div className="flex md:flex-row flex-col gap-3">
           <Input
             isRequired
             label="Hero Title"
