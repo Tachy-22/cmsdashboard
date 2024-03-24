@@ -17,6 +17,8 @@ import { Product } from "@prisma/client";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { deleteProduct } from "@/actions/product/deleteProduct";
 import { useToast } from "./ui/use-toast";
+import { useEdgeStore } from "@/lib/edgestore";
+import SubmitButton from "./forms/SubmitButton";
 
 const statusColorMap = {
   active: "success",
@@ -26,6 +28,7 @@ const statusColorMap = {
 
 export default function ProductsTable() {
   const { toast } = useToast();
+  const { edgestore } = useEdgeStore();
   const { project } = useAppSelector((state) => state.projectSlice);
   const products: Product[] = project?.product as Product[];
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -55,11 +58,17 @@ export default function ProductsTable() {
     },
   ];
 
-
-  const handleProductDeletion = async (id: string) => {
+  const handleProductDeletion = async (id: string, url: string) => {
     try {
       const success = await deleteProduct(id);
-      console.log({ success });
+      console.log({ success, url });
+      if (success) {
+        const result = await edgestore.publicFiles.delete({
+          url: url,
+        });
+        console.log({ result });
+      } else {
+      }
       setIsDeleting(false);
 
       toast({ description: "Product has been deleted !" });
@@ -112,21 +121,20 @@ export default function ProductsTable() {
           return (
             <div className="relative flex items-center gap-2">
               <Tooltip color="danger" content="Delete product">
-                <span
-                  onClick={() => {
-                    setIsDeleting((prev) => !prev);
-
+                <form
+                  action={async () => {
                     console.log("id of prod to del", product?.id);
-                    handleProductDeletion(product?.id);
+                    await handleProductDeletion(
+                      product?.id,
+                      product?.images[0] as string
+                    );
                   }}
                   className="text-lg text-danger cursor-pointer active:opacity-50"
                 >
-                  {isDeleting ? (
-                    <Spinner color="danger" size="md" />
-                  ) : (
+                  <SubmitButton color="danger" variant="light">
                     <Trash />
-                  )}
-                </span>
+                  </SubmitButton>
+                </form>
               </Tooltip>
             </div>
           );

@@ -20,10 +20,9 @@ const CreatedProjectCountCard = ({ projects }: { projects: Project[] }) => {
       (project) => project?.creatorId === TypedSession?.user?.id
     );
 
-
   return (
     <Card
-      className={`  ${textStyle} max-h-fit py-3 w-full sm:max-w-[20rem] min-w-fit max-w-full `}
+      className={`  ${textStyle} max-h-fit py-3 w-full sm:max-w-[20rem] min-w-fit max-w-full bg-transparent`}
     >
       <CardBody>
         <div className="flex gap-1 items-start">
