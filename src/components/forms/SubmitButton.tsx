@@ -8,6 +8,7 @@ import { useFormStatus } from "react-dom";
 // Define additional props for SubmitButton
 interface SubmitButtonProps extends ButtonProps {
   // Add any additional props specific to SubmitButton
+  //  loadingText?: string;
 }
 
 const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
@@ -22,7 +23,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
       isLoading={pending}
       {...props} // Spread the additional props
     >
-      {pending ? "Saving" : "Submit"}
+      {pending ? "Saving" : props.children || "submit"}
     </Button>
   );
 };
