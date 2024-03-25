@@ -9,8 +9,14 @@ import { Hero } from "@prisma/client";
 import SubmitButton from "./SubmitButton";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { useToast } from "../ui/use-toast";
+import { X } from "lucide-react";
+import { updateHeroImages } from "@/actions/hero/updateHeroImages";
+import DeleteButton from "./DeleteButton";
+import { useEdgeStore } from "@/lib/edgestore";
 
 function HeroForm() {
+  const { edgestore } = useEdgeStore();
+
   const { toast } = useToast();
   const { project } = useAppSelector((state) => state.projectSlice);
   const heroData: Hero = project?.hero as Hero;
@@ -50,12 +56,38 @@ function HeroForm() {
     }
   };
 
+  const handleImageDeletion = async (url: string) => {
+    const newImages = uniqueImages.filter((image) => image !== url);
+    const success = await updateHeroImages(newImages, heroData.id as string);
+    if (success) {
+      await edgestore.publicFiles.delete({
+        url: url,
+      });
+      toast({
+        title: "Image deletion !",
+        description: "Hero content updated successfully",
+      });
+    } else {
+      toast({
+        title: "Image deletion !",
+        description: "An error occured, Hero content was not updated !",
+      });
+      return;
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="w-full  gap-4  flex flex-col justify-between">
         <div className="w-full flex gap-4">
           {uniqueImages?.map((image, id) => (
-            <div key={id} className="h-full">
+            <form
+              action={async () => {
+                await handleImageDeletion(image);
+              }}
+              key={id}
+              className="h-full relative group hover:brightness-75"
+            >
               <Image
                 src={image}
                 height={100}
@@ -63,7 +95,17 @@ function HeroForm() {
                 alt={`image-${id}`}
                 className="h-[6rem]  w-[6rem] rounded-lg "
               />
-            </div>
+              <DeleteButton
+                isIconOnly
+                variant="flat"
+                className="absolute -top-2  -right-2 group-hover:flex hidden bg-transparent border-0 text-black  justify-center "
+              >
+                <X
+                  size={18}
+                  className="   rounded-full hover:border-red-600 border border-white hover:text-red-600 w-fit"
+                />
+              </DeleteButton>
+            </form>
           ))}
         </div>
         <AddHeroImagesModal getImageUrl={getImageUrl} />

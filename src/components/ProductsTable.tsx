@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -18,7 +18,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { deleteProduct } from "@/actions/product/deleteProduct";
 import { useToast } from "./ui/use-toast";
 import { useEdgeStore } from "@/lib/edgestore";
-import SubmitButton from "./forms/SubmitButton";
+import DeleteButton from "./forms/DeleteButton";
 
 const statusColorMap = {
   active: "success",
@@ -31,7 +31,6 @@ export default function ProductsTable() {
   const { edgestore } = useEdgeStore();
   const { project } = useAppSelector((state) => state.projectSlice);
   const products: Product[] = project?.product as Product[];
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const columns = [
     {
@@ -58,26 +57,26 @@ export default function ProductsTable() {
     },
   ];
 
-  const handleProductDeletion = async (id: string, url: string) => {
-    try {
-      const success = await deleteProduct(id);
-      console.log({ success, url });
-      if (success) {
-        const result = await edgestore.publicFiles.delete({
-          url: url,
-        });
-        console.log({ result });
-      } else {
+  const handleProductDeletion = useCallback(
+    async (id: string, url: string) => {
+      try {
+        const success = await deleteProduct(id);
+        if (success) {
+          const result = await edgestore.publicFiles.delete({
+            url: url,
+          });
+        } else {
+        }
+
+        toast({ description: "Product has been deleted !" });
+      } catch (error) {
+
+        toast({ description: `Product has not been deleted: ${error}` });
       }
-      setIsDeleting(false);
-
-      toast({ description: "Product has been deleted !" });
-    } catch (error) {
-      setIsDeleting(false);
-
-      toast({ description: `Product has not been deleted: ${error}` });
-    }
-  };
+    },
+    [edgestore.publicFiles, toast]
+  );
+  ;
 
   const renderCell = React.useCallback(
     (product: Product, columnKey: string) => {
@@ -123,7 +122,6 @@ export default function ProductsTable() {
               <Tooltip color="danger" content="Delete product">
                 <form
                   action={async () => {
-                    console.log("id of prod to del", product?.id);
                     await handleProductDeletion(
                       product?.id,
                       product?.images[0] as string
@@ -131,9 +129,9 @@ export default function ProductsTable() {
                   }}
                   className="text-lg text-danger cursor-pointer active:opacity-50"
                 >
-                  <SubmitButton color="danger" variant="light">
+                  <DeleteButton color="danger" variant="faded" className="border-0">
                     <Trash />
-                  </SubmitButton>
+                  </DeleteButton>
                 </form>
               </Tooltip>
             </div>
@@ -142,7 +140,7 @@ export default function ProductsTable() {
           return cellValue;
       }
     },
-    []
+    [handleProductDeletion]
   );
 
   return (

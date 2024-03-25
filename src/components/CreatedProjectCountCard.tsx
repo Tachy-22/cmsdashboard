@@ -22,7 +22,7 @@ const CreatedProjectCountCard = ({ projects }: { projects: Project[] }) => {
 
   return (
     <Card
-      className={`  ${textStyle} max-h-fit py-3 w-full sm:max-w-[20rem] min-w-fit max-w-full bg-transparent`}
+      className={`  ${textStyle} max-h-fit py-3 w-full sm:max-w-[20rem] min-w-fit max-w-full `}
     >
       <CardBody>
         <div className="flex gap-1 items-start">

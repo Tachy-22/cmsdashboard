@@ -1,7 +1,7 @@
 "use client";
 // Assuming your TypeScript environment is configured properly
 
-import { Button, ButtonProps } from "@nextui-org/react";
+import { Button, ButtonProps, Spinner } from "@nextui-org/react";
 import React from "react";
 import { useFormStatus } from "react-dom";
 
@@ -22,7 +22,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = (props) => {
       isLoading={pending}
       {...props} // Spread the additional props
     >
-      {pending ? "Deleting" : "Delete"}
+      {pending ? "" : props.children || "Delete"}
     </Button>
   );
 };

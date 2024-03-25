@@ -23,7 +23,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
       isLoading={pending}
       {...props} // Spread the additional props
     >
-      {pending ? "Saving" : props.children || "submit"}
+      {pending ? "processing" : props.children || "submit"}
     </Button>
   );
 };
