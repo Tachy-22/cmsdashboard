@@ -118,7 +118,7 @@ export default function ProductsTable() {
           );
         case "actions":
           return (
-            <div className="relative flex items-center gap-2">
+            <div className="relative flex items-center gap-[0.5rem]">
               <Tooltip color="danger" content="Delete product">
                 <form
                   action={async () => {
